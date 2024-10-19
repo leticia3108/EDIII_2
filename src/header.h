@@ -19,8 +19,11 @@
 
 // Definições
 #define T_MAX 30
+#define T_REG_DADOS 160
+#define T_DADOS 1600
 
 // Funções de uso comum
+int leitura_variavel(char *, FILE*);
 
 // Funções respectivas de cada funcionalidade do projeto
 void ex7();
