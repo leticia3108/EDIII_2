@@ -7,7 +7,6 @@
 #include "../include/main.h"
 
 
-
 int main() {
     // Leitura da entrada inicial do usuário
     int opcao = 0;

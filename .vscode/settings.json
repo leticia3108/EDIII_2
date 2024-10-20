@@ -3,6 +3,7 @@
         "*.c": "c",
         "funcoes_fornecidas.h": "c",
         "stdlib.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "main.h": "c"
     }
 }

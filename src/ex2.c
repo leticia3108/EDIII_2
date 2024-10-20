@@ -8,13 +8,15 @@
 
 
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 
 #include "../include/main.h"
 #include "../include/funcoes_fornecidas.h"
+#include "../include/common.h"
+#include "../include/ex2.h"
 
 
 

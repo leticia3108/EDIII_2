@@ -5,49 +5,9 @@
 
 #include "../include/main.h"
 #include "../include/funcoes_fornecidas.h"
+#include "../include/common.h"
+#include "../include/ex7.h"
 
-
-
-/* A Função find_name busca o nome e a chave do registro, pula para 
-o próximo registro e salva os resultados na struct de indice */
-
-void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
-    // Escreve a versão inicial do cabeçalho
-    cab_indice cabecalho;
-
-    cabecalho.status = '0';
-    cabecalho.noRaiz = -1;
-    cabecalho.RRNproxNo = 0;
-
-    fwrite(&cabecalho.status, sizeof(char), 1, fbin_ind);
-    fwrite(&cabecalho.noRaiz, sizeof(int), 1, fbin_ind);
-    fwrite(&cabecalho.RRNproxNo, sizeof(int), 1, fbin_ind);
-
-    // Deixa todas os demais endereços do disco setados com $
-    for (int i = 0; i < (T_CAB_IND - 9); i++){
-    fwrite("$", sizeof(char), 1, fbin_ind);
-    }
-}
-
-void encontra_nome(FILE* fbin, char* nome, indice* ind){
-    char* c = malloc(1*sizeof(char)); 
-
-    fread(c, sizeof(char), 1, fbin);
-    while ((*c) == '1'){
-        fseek(fbin, T_REG_DADOS-1, SEEK_CUR);
-        fread(c, sizeof(char), 1, fbin);
-    }
-
-    fseek(fbin, 17, SEEK_CUR);
-    long pular = (long) leitura_variavel(nome, fbin);
-   // printf("%s", nome);
-    fseek(fbin, T_REG_DADOS - pular - 18, SEEK_CUR);
-
-    free(c);
-    ind->ptr = (ftell(fbin)-1600)/160 - 1;
-    ind->chave = converteNome(nome);
- //   printf("Inserido dado %ld-%ld\n", ind->chave, ind->ptr);
-}
 
 void ex7(){
 
