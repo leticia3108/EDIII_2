@@ -1,26 +1,37 @@
-
 CC = gcc
 CFLAGS = -g -Wall -O0 -std=c99
-INCLUDE = $(wildcard include/*.c)
+INCLUDE = $(wildcard include/*.h)
 SOURCES = $(wildcard src/*.c)
-OBJS = $(SOURCES:include/%.c=include/%.o)
-INCLUDE_OBJS = $(INCLUDE:src/%.c=src/%.o)
-TARGET = main
+OBJ = $(SOURCES:$(SRC_DIR)/%.c = $(BUILD_DIR)/%.o)
+# INCLUDE_OBJ = $(INCLUDE:src/%.c=src/%.o)
+TARGET = $(BIN_DIR)/executavel
+
+# Diretórios
+SRC_DIR = src
+BIN_DIR = bin
+INC_DIR = include
+BUILD_DIR = build
+
+# Criar diretórios bin e build
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 # Compilar arquivos .c em arquivos .o
-%.o: %.c src/header.h include/funcoes_fornecidas.h
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/%.h $(INC_DIR)/main.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(INCLUDE_OBJS) -o $(TARGET)
+all: $(OBJ) $(BUILD_DIR) $(BIN_DIR)
+	$(CC) $(CFLAGS) $(OBJ) -o $(TARGET)
 
-run: 
-	./main
+run: $(TARGET)
+	$(TARGET)
 
 .PHONY: clean
 
 clean:
-	@rm -f src/*.o $(TARGET) core
+	@rm -f $(BUILD_DIR)/*.o $(TARGET) core
 
 zip: 
-	zip -r edIII.zip src/ Makefile
+	zip -r edIII.zip $(INC_DIR)/* $(SRC_DIR)/* ./Makefile

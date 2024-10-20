@@ -1,4 +1,12 @@
-#include "header.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
+
+#include "../include/main.h"
+
+
 
 int main() {
     // Leitura da entrada inicial do usuário

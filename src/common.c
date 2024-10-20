@@ -2,7 +2,15 @@
 Arquivo com as funções usadas no resto do projeto
 */
 
-#include "header.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
+
+#include "../include/main.h"
+#include "../include/funcoes_fornecidas.h"
+
 
 /* A seguinte função lê uma string variável do arquivo binário na posição
 atual e retorna o desvio do arquivo (considerando o delimitador) */
@@ -111,7 +119,7 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
           fseek(binario_saida, (RRNraiz+1)*93 + 9 + (i*20), SEEK_SET);
 
           fread(&P,sizeof(int),1,binario_saida);
-          fread(&chave,sizeof(long),1,binario_saida);
+          fread(&(ind.chave),sizeof(long),1,binario_saida);
 
           if(ind.chave < chave1){
             inserir(ind, binario_saida, P);
@@ -124,8 +132,8 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
             // Inserir o elemento na árvore caso tenha espaço
             if (nroChaves < 4){
             
-            fseek(binario_saida, (RRNraiz+1)*93 + 13 + 20*nroChaves), SEEK_SET);
-            fwrite(&chave, sizeof(long),1, binario_saida);
+            fseek(binario_saida, (RRNraiz+1)*93 + 13 + 20*nroChaves, SEEK_SET);
+            fwrite(&(ind.chave), sizeof(long),1, binario_saida);
             fwrite(&ind.ptr, sizeof(int), 1, binario_saida);
 
 

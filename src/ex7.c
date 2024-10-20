@@ -1,5 +1,12 @@
-#include "header.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
+
+#include "../include/main.h"
 #include "../include/funcoes_fornecidas.h"
+
+
 
 /* A Função find_name busca o nome e a chave do registro, pula para 
 o próximo registro e salva os resultados na struct de indice */
@@ -86,7 +93,7 @@ void ex7(){
     fread(&RRNraiz, sizeof(int), 1, binario_saida);
 
     //Incluir o índice na árvore B
-    inserir(*ind,binario_saida,RRNraiz);
+    inserir(*ind,binario_saida, RRNraiz);
 
     free(nome);
     free(ind);

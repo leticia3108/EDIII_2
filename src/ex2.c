@@ -7,7 +7,16 @@
 */
 
 
-#include "header.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
+
+#include "../include/main.h"
+#include "../include/funcoes_fornecidas.h"
+
+
 
 /* Funções para execução do ex 2 */
 
