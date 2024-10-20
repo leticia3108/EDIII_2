@@ -34,12 +34,33 @@ typedef struct{
     int RRNproxNo;
 } cab_indice;
 
+typedef struct{
+    char folha;
+    int nroChavesNo;
+    int RRNdoNo;
+    int P1;
+    long C1;
+    long PR1;
+    int P2;
+    long C2;
+    long PR2;
+    int P3;
+    long C3;
+    long PR3;
+    int P4;
+    long C4;
+    long PR4;
+    int P5;
+} no_indice;
+
 // Funções de uso comum
 int leitura_variavel(char *, FILE*);
+void escrever(no_indice, FILE*);
 
 // Funções respectivas de cada funcionalidade do projeto
 void ex7();
 void cabecalho_indice(FILE*, FILE*);
-void find_name(FILE*, char*, indice*);
+void encontra_nome(FILE*, char*, indice*);
+void inserir(indice, FILE*);
 
 #endif

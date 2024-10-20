@@ -22,7 +22,7 @@ void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
     }
 }
 
-void find_name(FILE* fbin, char* nome, indice* ind){
+void encontra_nome(FILE* fbin, char* nome, indice* ind){
     char* c = malloc(1*sizeof(char)); 
 
     fread(c, sizeof(char), 1, fbin);
@@ -37,7 +37,7 @@ void find_name(FILE* fbin, char* nome, indice* ind){
     fseek(fbin, T_REG_DADOS - pular - 18, SEEK_CUR);
 
     free(c);
-    ind->ptr = (ftell(fbin)-1600)/160;
+    ind->ptr = (ftell(fbin)-1600)/160 - 1;
     ind->chave = converteNome(nome);
  //   printf("Inserido dado %ld-%ld\n", ind->chave, ind->ptr);
 }
@@ -62,7 +62,7 @@ void ex7(){
     }
 
     // Abertura do arquivo de índice para escrita
-    FILE *binario_saida = fopen(nome_saida,"wb");
+    FILE *binario_saida = fopen(nome_saida,"wb+");
     if (binario_saida == NULL){
         printf("Erro ao criar o arquivo de indice");
         return;
@@ -77,11 +77,16 @@ void ex7(){
     // Encontrar o primeiro nome da lista para adicionar à árvore B
     char* nome = malloc(T_MAX * sizeof(char));
     indice* ind = malloc(sizeof(indice));
-    find_name(binario_entrada, nome, ind);
+    encontra_nome(binario_entrada, nome, ind);
+
+    fseek(binario_saida, 1, SEEK_SET);
+
+    //Armazena o RRN da raiz
+    int RRNraiz;
+    fread(&RRNraiz, sizeof(int), 1, binario_saida);
 
     //Incluir o índice na árvore B
-    incluir(ind,binario_saida);
-
+    inserir(*ind,binario_saida,RRNraiz);
 
     free(nome);
     free(ind);
