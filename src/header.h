@@ -20,11 +20,15 @@
 #define T_REG_DADOS 160
 #define T_DADOS 1600
 #define T_CAB_IND 93
+#define ORDEM_B 5
 
 // Struct para um índice
 typedef struct {
+    int p1;
     long chave;
-    long ptr;
+    long pr;
+    int p2;
+    int novo;
 } indice;
 
 // Struct para o cabeçalho do arquivo de índice
@@ -61,6 +65,11 @@ void escrever(no_indice, FILE*);
 void ex7();
 void cabecalho_indice(FILE*, FILE*);
 void encontra_nome(FILE*, char*, indice*);
-void inserir(indice, FILE*);
+void inserir(indice, FILE*, int);
+void reordena_no(FILE*, int, int);
+void insere_com_espaco(FILE*, indice, int, char);
+void insere_sem_espaco(FILE*, indice, int, int, char);
+
+
 
 #endif

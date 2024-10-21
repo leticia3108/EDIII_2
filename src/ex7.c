@@ -18,7 +18,7 @@ void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
 
     // Deixa todas os demais endereços do disco setados com $
     for (int i = 0; i < (T_CAB_IND - 9); i++){
-    fwrite("$", sizeof(char), 1, fbin_ind);
+        fwrite("$", sizeof(char), 1, fbin_ind);
     }
 }
 
@@ -28,6 +28,7 @@ void encontra_nome(FILE* fbin, char* nome, indice* ind){
     fread(c, sizeof(char), 1, fbin);
     while ((*c) == '1'){
         fseek(fbin, T_REG_DADOS-1, SEEK_CUR);
+       // printf("ftell = %ld\n", ftell(fbin));
         fread(c, sizeof(char), 1, fbin);
     }
 
@@ -37,9 +38,10 @@ void encontra_nome(FILE* fbin, char* nome, indice* ind){
     fseek(fbin, T_REG_DADOS - pular - 18, SEEK_CUR);
 
     free(c);
-    ind->ptr = (ftell(fbin)-1600)/160 - 1;
+    ind->pr = (ftell(fbin)-1600)/160 - 1;
     ind->chave = converteNome(nome);
- //   printf("Inserido dado %ld-%ld\n", ind->chave, ind->ptr);
+
+    printf("Inserido dado (%s)(%ld)-%ld\n", nome, ind->chave, ind->pr);
 }
 
 void ex7(){
@@ -74,10 +76,9 @@ void ex7(){
     // Pular cabeçalho do arquivo de dados
     fseek(binario_entrada, T_DADOS, SEEK_SET);
 
-    // Encontrar o primeiro nome da lista para adicionar à árvore B
+    // Encontrar os nomes da lista para adicionar à árvore B
     char* nome = malloc(T_MAX * sizeof(char));
     indice* ind = malloc(sizeof(indice));
-    encontra_nome(binario_entrada, nome, ind);
 
     fseek(binario_saida, 1, SEEK_SET);
 
@@ -85,8 +86,17 @@ void ex7(){
     int RRNraiz;
     fread(&RRNraiz, sizeof(int), 1, binario_saida);
 
-    //Incluir o índice na árvore B
+    int last_ptr_dado = -1;
+
+    for (int i = 0; i<4; i++){
+    // Pular cabeçalho do arquivo de dados
+    fseek(binario_entrada, T_DADOS + 160*(last_ptr_dado+1), SEEK_SET);
+    encontra_nome(binario_entrada, nome, ind);
+    last_ptr_dado = ind->pr;
+    fseek(binario_saida, 1, SEEK_SET);
+    fread(&RRNraiz, sizeof(int), 1, binario_saida);
     inserir(*ind,binario_saida,RRNraiz);
+    }
 
     free(nome);
     free(ind);
