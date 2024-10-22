@@ -24,12 +24,21 @@ void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
 
 void encontra_nome(FILE* fbin, char* nome, indice* ind){
     char* c = malloc(1*sizeof(char)); 
+    
+    if(feof(fbin)){
+       // printf("Fim do arquivo de entrada");
+        return;
+    }
 
     fread(c, sizeof(char), 1, fbin);
     while ((*c) == '1'){
         fseek(fbin, T_REG_DADOS-1, SEEK_CUR);
        // printf("ftell = %ld\n", ftell(fbin));
         fread(c, sizeof(char), 1, fbin);
+        if(feof(fbin)){
+           // printf("Fim do arquivo de entrada");
+        return;
+    }
     }
 
     fseek(fbin, 17, SEEK_CUR);
@@ -41,7 +50,7 @@ void encontra_nome(FILE* fbin, char* nome, indice* ind){
     ind->pr = (ftell(fbin)-1600)/160 - 1;
     ind->chave = converteNome(nome);
 
-    printf("Inserido dado (%s)(%ld)-%ld\n", nome, ind->chave, ind->pr);
+    //printf("Encontrado dado (%s)(%ld)-%ld\n", nome, ind->chave, ind->pr);
 }
 
 void ex7(){
@@ -54,7 +63,7 @@ void ex7(){
     // Ler o nome do arquivo de saída, com tamanho máximo 30:
     char nome_saida[T_MAX];
     fgets(nome_saida, T_MAX, stdin);
-    nome_entrada[strlen(nome_saida) - 1] = '\0';
+    nome_saida[strlen(nome_saida) - 1] = '\0';
 
     // Abertura do binário de entrada para leitura
     FILE *binario_entrada = fopen(nome_entrada,"rb");
@@ -88,16 +97,23 @@ void ex7(){
 
     int last_ptr_dado = -1;
 
-    for (int i = 0; i<4; i++){
+    int NumReg = 0; // Armazena o número de registros do arquivo de entrada;
+    fseek(binario_entrada, 5, SEEK_SET);
+    fread(&NumReg, sizeof(int), 1, binario_entrada);
+
+    for (int i = 0; i<NumReg; i++){
     // Pular cabeçalho do arquivo de dados
+    if(feof(binario_entrada))
+        break;
     fseek(binario_entrada, T_DADOS + 160*(last_ptr_dado+1), SEEK_SET);
     encontra_nome(binario_entrada, nome, ind);
     last_ptr_dado = ind->pr;
     fseek(binario_saida, 1, SEEK_SET);
     fread(&RRNraiz, sizeof(int), 1, binario_saida);
-    inserir(*ind,binario_saida,RRNraiz);
+    inserir(*ind,binario_saida,RRNraiz,-1);   //
     }
 
+    binarioNaTela(nome_saida);
     free(nome);
     free(ind);
     fclose(binario_entrada);

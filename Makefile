@@ -23,4 +23,4 @@ clean:
 	@rm -f src/*.o $(TARGET) core
 
 zip: 
-	zip -r edIII.zip src/ Makefile
+	zip -r edIII.zip src/ include/ Makefile

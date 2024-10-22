@@ -57,6 +57,9 @@ typedef struct{
     int P5;
 } no_indice;
 
+// Funções fornecidas
+void binarioNaTela(char *);
+
 // Funções de uso comum
 int leitura_variavel(char *, FILE*);
 void escrever(no_indice, FILE*);
@@ -65,9 +68,9 @@ void escrever(no_indice, FILE*);
 void ex7();
 void cabecalho_indice(FILE*, FILE*);
 void encontra_nome(FILE*, char*, indice*);
-void inserir(indice, FILE*, int);
+void inserir(indice, FILE*, int, int);
 void reordena_no(FILE*, int, int);
-void insere_com_espaco(FILE*, indice, int, char);
+void insere_com_espaco(FILE*, indice, int, int);
 void insere_sem_espaco(FILE*, indice, int, int, char);
 
 
