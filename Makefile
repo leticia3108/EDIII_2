@@ -31,7 +31,7 @@ run: $(TARGET)
 .PHONY: clean
 
 clean:
-	@rm -f $(BUILD_DIR)/*.o $(TARGET) core
+	@rm -f $(BUILD_DIR)/*.o ./*.zip $(TARGET) core
 
 zip: 
 	@rm -f *.zip
