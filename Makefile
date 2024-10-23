@@ -34,4 +34,5 @@ clean:
 	@rm -f $(BUILD_DIR)/*.o $(TARGET) core
 
 zip: 
+	@rm -f *.zip
 	zip -r edIII.zip $(INC_DIR)/* $(SRC_DIR)/* ./Makefile

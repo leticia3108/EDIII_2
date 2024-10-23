@@ -4,6 +4,7 @@
         "funcoes_fornecidas.h": "c",
         "stdlib.h": "c",
         "stddef.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "string.h": "c"
     }
 }

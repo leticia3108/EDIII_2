@@ -48,14 +48,4 @@ typedef struct{
     int P5;
 } no_indice;
 
-// Funções de uso comum
-// int leitura_variavel(char *, FILE*);
-// void escrever(no_indice, FILE*);
-
-// Funções respectivas de cada funcionalidade do projeto
-// void ex7();
-// void cabecalho_indice(FILE*, FILE*);
-// void encontra_nome(FILE*, char*, indice*);
-// void inserir(indice, FILE*);
-
 #endif
