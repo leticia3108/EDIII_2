@@ -9,26 +9,25 @@ int proxRRN = 0;
 atual e retorna o desvio do arquivo (considerando o delimitador) */
 int leitura_variavel(char* str, FILE* binario_entrada){
 
-    char* c = malloc(sizeof(char));
+    char c;
+    fread(&c, sizeof(char), 1, binario_entrada);
+
     if (feof(binario_entrada)){
-        free(c);
         return -1;
     }
-    fread(c, sizeof(char), 1, binario_entrada);
 
     int i = 0;
-    while (*c != '#'){
-        str[i] = *c;
+    while (c != '#'){
+        str[i] = c;
         if (feof(binario_entrada)){
-            free(c);
             return -1;
         }
-        fread(c, sizeof(char), 1, binario_entrada);
+        fread(&c, sizeof(char), 1, binario_entrada);
         i++;
     }
         str[i] = '\0';
         i++;
-        free(c);
+
     return i;
 }
 
@@ -92,7 +91,7 @@ fwrite(&no.P4, sizeof(int), 1, binario_saida);
 fwrite(&no.C4, sizeof(long), 1, binario_saida);
 fwrite(&no.PR4, sizeof(long), 1, binario_saida);
 
-printf("*C4 = %ld*\n", no.C4);
+//printf("*PR1 = %ld*\n", no.PR1);
 
 fwrite(&no.P5, sizeof(int), 1, binario_saida); 
 
@@ -100,7 +99,7 @@ fwrite(&no.P5, sizeof(int), 1, binario_saida);
 
 void sobreescrever(no_indice no, FILE* binario_saida, int RRN){
 
-//printf("Escrevendo...\n");
+////printf("Escrevendo...\n");
 
 fseek(binario_saida,(1+RRN)*93,SEEK_SET);
 
@@ -129,12 +128,13 @@ fwrite(&no.C4, sizeof(long), 1, binario_saida);
 fwrite(&no.PR4, sizeof(long), 1, binario_saida);
 
 fwrite(&no.P5, sizeof(int), 1, binario_saida); 
+//printf("*PR1 = %ld*\n", no.PR1);
 
 }
 
 void printaNo(no_indice* no){
-    printf("Print Nó (%d): (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n",
-    no->RRNdoNo, no->P1, no->C1, no->P2, no->C2, no->P3, no-> C3, no->P4, no->C4, no->P5);
+    //printf("Print Nó (%d): (%d) %ld %ld (%d) %ld(%d) %ld (%d) %ld (%d)\n",
+    //no->RRNdoNo, no->P1, no->C1, no->PR1, no->P2, no->C2, no->P3, no-> C3, no->P4, no->C4, no->P5);
 }
 
 void lerNo(no_indice* no, int RRN, FILE* bin){
@@ -176,7 +176,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fread(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    //printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
+    ////printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
 
     fread(&ind_vect[0].chave, sizeof(long), 1, binario_saida);
     fread(&ind_vect[0].pr, sizeof(long), 1, binario_saida);
@@ -185,7 +185,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     for (int i = 1; i < nroChaves; i++){
         fread(&ind_vect[i].p1, sizeof(int), 1, binario_saida);
         ind_vect[i-1].p2 = ind_vect[i].p1;
-        //printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2);
+        ////printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2);
         fread(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
         fread(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
         ind_vect[i].novo = 0;
@@ -196,7 +196,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fread(&ind_vect[nroChaves-1].p2, sizeof(int), 1, binario_saida);
 
-  //  printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
+  //  //printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
   //  nroChaves, ind_vect[0].chave, ind_vect[1].chave,ind_vect[2].chave,ind_vect[3].chave);
 
     for (int j = 0; j < nroChaves-1; j++){
@@ -224,20 +224,20 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     } }}
 
-  //  printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
+  //  //printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
    // nroChaves, ind_vect[0].chave, ind_vect[1].chave,ind_vect[2].chave,ind_vect[3].chave);
 
     fseek(binario_saida, (RRNno+1)*93 + 9, SEEK_SET);
 
     fwrite(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    //printf("#(%d) ", ind_vect[0].p1);
+    ////printf("#(%d) ", ind_vect[0].p1);
 
         for (int i = 0; i < nroChaves; i++){
             fwrite(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].p2, sizeof(int), 1, binario_saida);
-        //    printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2);
+        //    //printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2);
         }
     //printf("#\n");
 }
@@ -251,7 +251,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     //printf("#(%d %d)\n ",ind.p1, ind.p2);
 
     if (nroChaves == 1){
-        printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves);
+        //printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves);
         fseek(binario_saida, (RRN+1)*93 + 9 + 20*(nroChaves-1), SEEK_SET);
         fwrite(&ind.p1, sizeof(int),1, binario_saida);
         fwrite(&ind.chave, sizeof(long),1, binario_saida);
@@ -265,21 +265,20 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     fwrite(&ind.pr, sizeof(long),1, binario_saida);
     fwrite(&ind.p2, sizeof(int),1, binario_saida);
 
-    printf("Inserindo chave %ld com ponteiro %ld em %d (com espaço - nroChaves = %d) \n", ind.chave, ind.pr, RRN, nroChaves);
 
     reordena_no(binario_saida, RRN, nroChaves, ind.p1);
 
     no_indice* no = malloc (sizeof(no_indice));
     lerNo(no, RRN, binario_saida);
     printaNo(no);
-    printf("\n");
+    //printf("\n");
     free(no);
 
 }
 
 void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i){
 
-    printf("Inserindo (%ld) sem espaço em (%d), int i = %d\n", ind.chave, caminho[i].RRNdoNo, i);
+    //printf("Inserindo (%ld) sem espaço em (%d), int i = %d\n", ind.chave, caminho[i].RRNdoNo, i);
 
     int RRN = caminho[i].RRNdoNo;
     indice ind_vect[ORDEM_B];
@@ -377,9 +376,9 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
 
     // Criar um novo registro com a metade direita do atual
     escrever(no, binario_saida);
-    printf("P2:");
+    //printf("P2:");
     printaNo(&no);
-    printf("\n");
+    //printf("\n");
 
     // Atualizar o registro atual com a metade esquerda
     no.folha = caminho[i].folha;
@@ -411,24 +410,22 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
     no.P5 = -1;
 
     sobreescrever(no, binario_saida, caminho[i].RRNdoNo);
-    printf("P1:");
+    //printf("P1:");
     printaNo(&no);
-    printf("\n");
+    //printf("\n");
 
     // Atualizar os ponteiros do nó que sobe
     ind_vect[2].p1 = RRN;
     ind_vect[2].p2 = proxRRN;
-   // printf("#\n SOBE COM RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
 
     if ((caminho[i-1].nroChavesNo < (ORDEM_B-1)) && i >= 1){
         insere_com_espaco(binario_saida, ind_vect[2], caminho[i-1].nroChavesNo, caminho[i-1].RRNdoNo);
-   //     printf("#->insere com espaco caminho[%d].RRNdoNo = %d\n", i-1, caminho[i-1].RRNdoNo);
     } else {
         if (i == 0){
             no_indice noNovaRaiz = cria_nova_raiz(binario_saida, proxRRN+1);
      //       printf("#\n RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
             proxRRN++;
-      //      //printf("->->-> Uma nova raiz foi criada com RRN = %d", noNovaRaiz.RRNdoNo);
+            
             insere_com_espaco(binario_saida, ind_vect[2], 0, noNovaRaiz.RRNdoNo);
         } else {
             i--;
@@ -443,7 +440,8 @@ void ajustaCabecalho (FILE* fbin, char status, int noRaiz, int RRNproxNo){
     fseek (fbin, 0, SEEK_SET);
     fwrite (&status, sizeof(char), 1, fbin);
     fwrite (&noRaiz, sizeof(int), 1, fbin);
-    fwrite (&proxRRN, sizeof(int), 1, fbin);
+    int proxNo = proxRRN + 1;
+    fwrite (&proxNo, sizeof(int), 1, fbin);
 
     // Reescrever
 }
@@ -454,6 +452,7 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
     no_indice* caminho = malloc (sizeof(indice) * 30);
     int i = 0;
     int RRN;
+
 
     // Se o arquivo ainda não tiver um registro raiz, cria um
     if (RRNraiz == -1){
@@ -538,11 +537,11 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
 
             
             i++;
-            if(RRN>50){
+            if(RRN>1000){
+                printf("Algo errado!\n\n");
                 return;
-                printf("Algo errado\n\n\n");
             }
-            //printf("***RRN = %d\n", RRN);
+        
             lerNo(no, RRN, binario_saida);
             lerNo(&(caminho[i]), RRN, binario_saida);
             }
@@ -554,6 +553,7 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
                 insere_com_espaco(binario_saida, ind, no->nroChavesNo, RRN);
             } else {
                 insere_sem_espaco(binario_saida, ind, caminho, i);
+                
             }
     
     }
