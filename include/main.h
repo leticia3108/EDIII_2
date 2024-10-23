@@ -14,12 +14,16 @@
 #define T_REG_DADOS 160
 #define T_DADOS 1600
 #define T_CAB_IND 93
+#define ORDEM_B 5
 #define TAM_DISCO 1600
 
 // Struct para um índice
 typedef struct {
+    int p1;
     long chave;
-    long ptr;
+    long pr;
+    int p2;
+    int novo;
 } indice;
 
 // Struct para o cabeçalho do arquivo de índice
