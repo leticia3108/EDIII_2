@@ -63,15 +63,19 @@ void binarioNaTela(char *);
 // Funções de uso comum
 int leitura_variavel(char *, FILE*);
 void escrever(no_indice, FILE*);
+void lerNo(no_indice* no, int RRN, FILE* bin);
+void imprime_arvore(FILE* binario_saida, int RRN);
+void ajustaCabecalho (FILE* bin, char status, int noRaiz, int RRNproxNo);
+void inserir(indice ind, FILE* binario_saida, int RRNraiz);
 
 // Funções respectivas de cada funcionalidade do projeto
 void ex7();
 void cabecalho_indice(FILE*, FILE*);
-void encontra_nome(FILE*, char*, indice*);
-void inserir(indice, FILE*, int, int);
-void reordena_no(FILE*, int, int);
-void insere_com_espaco(FILE*, indice, int, int);
-void insere_sem_espaco(FILE*, indice, int, int, char);
+int encontra_nome(FILE*, char*, indice*);
+void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN);
+void reordena_no(FILE*, int, int, int);
+void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i);
+no_indice cria_nova_raiz(FILE* binario_saida, int RRNNovaRaiz);
 
 
 

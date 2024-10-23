@@ -83,6 +83,23 @@ void scan_quote_string(char *str) {
         Nota-se que estamos escrevendo do digito menos significativo para o 
         mais significativo
 */
+
+/*
+int cont = -1;
+int cont2 = 0;
+
+long converteNome(char* str){
+
+cont = (cont+1)%18;
+if (cont == 18){
+	cont2++;
+}
+long vect[18] = {1, 2, 101, 102, 50, 3, 4, 5, 51, 52, 53, 54, 103, 104, 105, 6 , 7, 8};
+
+return vect[cont + cont2*18];
+
+}*/
+
 long converteNome(char* str) {
     /* O registro que tem essa string como chave foi removido */
     if(str[0] == '*')
