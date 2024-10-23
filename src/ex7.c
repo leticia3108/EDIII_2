@@ -25,28 +25,44 @@ void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
 
     // Deixa todas os demais endereços do disco setados com $
     for (int i = 0; i < (T_CAB_IND - 9); i++){
-    fwrite("$", sizeof(char), 1, fbin_ind);
+        fwrite("$", sizeof(char), 1, fbin_ind);
     }
 }
 
-void encontra_nome(FILE* fbin, char* nome, indice* ind){
+int encontra_nome(FILE* fbin, char* nome, indice* ind){
     char* c = malloc(1*sizeof(char)); 
+    
+    if(feof(fbin)){
+       // printf("Fim do arquivo de entrada");
+        return 0;
+    }
 
     fread(c, sizeof(char), 1, fbin);
     while ((*c) == '1'){
         fseek(fbin, T_REG_DADOS-1, SEEK_CUR);
+       // printf("ftell = %ld\n", ftell(fbin));
         fread(c, sizeof(char), 1, fbin);
+        if(feof(fbin)){
+           // printf("Fim do arquivo de entrada");
+        return 0;
+    }
     }
 
     fseek(fbin, 17, SEEK_CUR);
     long pular = (long) leitura_variavel(nome, fbin);
+    if(pular == -1){
+        return 1;
+    }
    // printf("%s", nome);
     fseek(fbin, T_REG_DADOS - pular - 18, SEEK_CUR);
 
     free(c);
-    ind->ptr = (ftell(fbin)-1600)/160 - 1;
+    ind->pr = (ftell(fbin)-1600)/160 - 1;
     ind->chave = converteNome(nome);
- //   printf("Inserido dado %ld-%ld\n", ind->chave, ind->ptr);
+
+    return 0;
+
+    //printf("Encontrado dado (%s)(%ld)-%ld\n", nome, ind->chave, ind->pr);
 }
 
 void ex7(){
