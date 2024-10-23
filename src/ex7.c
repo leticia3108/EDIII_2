@@ -73,7 +73,7 @@ void ex7(){
    // Ler o nome do arquivo de saída, com tamanho máximo 30:
     char nome_saida2[T_MAX];
     fgets(nome_saida2, T_MAX, stdin);
-    nome_saida[strlen(nome_saida2) - 1] = '\0';
+    nome_saida2[strlen(nome_saida2) - 1] = '\0';
 
     // Abertura do binário de entrada para leitura
     FILE *binario_entrada = fopen(nome_entrada,"rb");
@@ -90,7 +90,7 @@ void ex7(){
     }
 
     // Abertura do arquivo de índice para escrita
-    FILE *binario_saida2 = fopen(nome_saida,"wb+");
+    FILE *binario_saida2 = fopen(nome_saida2,"rb");
     if (binario_saida2 == NULL){
         printf("Erro ao abrir o novo binario de saida");
         return;
@@ -132,7 +132,7 @@ void ex7(){
             break;}
         fseek(binario_entrada, T_DADOS + 160*(last_ptr_dado+1), SEEK_SET);
         if( encontra_nome(binario_entrada, nome, ind) == 1){
-            printf("Encontra nome, fim do arquivo\n");
+           // printf("Encontra nome, fim do arquivo\n");
             break;
         }
         last_ptr_dado = ind->pr;
@@ -153,9 +153,9 @@ void ex7(){
     ajustaCabecalho(binario_saida, '1', RRN, -2);
 
     binarioNaTela(nome_saida);
-    
+    binarioNaTela(nome_saida2);
 
-    //imprime_arvore(binario_saida, RRN);
+    imprime_arvore(binario_saida, RRN);
     printf ("\n Original:\n");
     imprime_arvore(binario_saida2, 30);
 
