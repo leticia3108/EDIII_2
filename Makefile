@@ -19,7 +19,7 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 # Compilar arquivos .c em arquivos .o
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/%.h $(INC_DIR)/main.h
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/%.h $(INC_DIR)/main.h $(INC_DIR)/funcoes_fornecidas.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(OBJ) $(BUILD_DIR) $(BIN_DIR)

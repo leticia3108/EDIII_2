@@ -63,47 +63,61 @@ fwrite(&dado.alimento, strlen(dado.alimento), 1, binario_entrada);
 return encadeamento;
 }
 
-void imprime_dado(FILE* binario_entrada, DADO* dado){
+void imprime_dado(FILE* binario_entrada, DADO* dado) {
+    // Verifica se o registro foi removido
+    fread(&(dado->removido), sizeof(char), 1, binario_entrada);
+    
+    if (dado->removido != '1') {
+        // Ignora o encadeamento de registros removidos
+        fseek(binario_entrada, 4, SEEK_CUR);
 
-        int dado_removido;
+        // Leitura dos campos do registro
+        fread(&(dado->populacao), sizeof(int), 1, binario_entrada);
+        fread(&(dado->tamanho), sizeof(float), 1, binario_entrada);
+        fread(&(dado->unidadeMedida), sizeof(char), 1, binario_entrada);
+        fread(&(dado->velocidade), sizeof(int), 1, binario_entrada);
 
-        fread (&(dado->removido), sizeof(char), 1, binario_entrada);
-        if (dado->removido == '0'){
-            int pular = 0;
-            fseek(binario_entrada, 8, SEEK_CUR);
+        // Lê as strings variáveis do arquivo binário
+        leitura_variavel(dado->nome, binario_entrada);
+        leitura_variavel(dado->especie, binario_entrada);
+        leitura_variavel(dado->habitat, binario_entrada);
+        leitura_variavel(dado->tipo, binario_entrada);
+        leitura_variavel(dado->dieta, binario_entrada);
 
+        // Adicionar prints para verificar os dados lidos
+        // printf("\n\n*********\n");
+        // printf("Nome: %s\n", dado->nome);
+        // printf("Especie: %s\n", dado->especie);
+        // printf("Tipo: %s\n", dado->tipo);
+        // printf("Dieta: %s\n", dado->dieta);
+        // printf("Lugar que habitava: %s\n", dado->habitat);
+        // printf("Tamanho: %.1f\n", dado->tamanho);
+        // printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);
+        // printf("\n*********\n\n");
 
-            fread(&(dado->tamanho), sizeof(float), 1, binario_entrada);
-            fread(&(dado->unidadeMedida), sizeof(char), 1, binario_entrada);
-            fread(&(dado->velocidade), sizeof(int), 1, binario_entrada);
- 
-            pular += 18;          
-            pular += leitura_variavel(dado->nome, binario_entrada);
-            pular += leitura_variavel(dado->especie, binario_entrada);
-            pular += leitura_variavel(dado->habitat, binario_entrada);
-            pular += leitura_variavel(dado->tipo, binario_entrada);
-            pular += leitura_variavel(dado->dieta, binario_entrada);
- 
+        printf("\n\n*********\n");
 
+        // Exibir os dados no formato correto
         printf("Nome: %s\nEspecie: %s\n", dado->nome, dado->especie);
-        
-        if (strcmp(dado->tipo, "") != 0)
-            printf( "Tipo: %s\n", dado->tipo);
 
-        if (strcmp(dado->dieta, "") != 0)
-            printf( "Dieta: %s\n", dado->dieta);
+        if (strcmp(dado->tipo, "") != 0)
+            printf("Tipo: %s\n", dado->tipo);
+
+        printf("Dieta: %s\n", dado->dieta);
 
         if (strcmp(dado->habitat, "") != 0)
-            printf( "Lugar que habitava: %s\n", dado->habitat);
-        
-        if (dado->tamanho != -1)
-            printf("Tamanho: %.1lf\n", dado->tamanho);
-        
-        if (dado->velocidade != -1)
-            printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);
-        
-        printf("\n");}
+            printf("Lugar que habitava: %s\n", dado->habitat);
 
+        printf("Tamanho: %.1lf m\n", dado->tamanho);
+
+        printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);
+        printf("\n*********\n\n");
+
+        printf("\n");
+    } else {
+        // Caso o registro esteja logicamente removido
+        printf("DEBUG: Registro logicamente removido.\n");
+    }
 }
 
 char* le_elemento(FILE* arquivo_entrada){

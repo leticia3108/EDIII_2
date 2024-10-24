@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include "main.h"
+
 int leitura_variavel(char*, FILE*);
 int sobreescreve_dado (FILE*, DADO);
 void imprime_dado(FILE*, DADO*);
