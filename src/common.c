@@ -27,7 +27,7 @@ int leitura_variavel(char* str, FILE* binario_entrada) {
         i++;
     }
 
-    str[i] = '\0';  // Finalizar a string
+    str[i] = '\0';  // Finalizar a string com '\0'
     return i + 1;   // Retornar o número de bytes lidos (inclui o delimitador '#')
 }
 
@@ -37,17 +37,18 @@ int encadeamento;
 char rem = 0;
 
 fwrite(&rem, 1, sizeof(char), binario_entrada);
-fread(&encadeamento, sizeof(int), 1, binario_entrada);
-fwrite(&dado.populacao, sizeof(int), 1, binario_entrada);
-fwrite(&dado.tamanho, sizeof(float), 1, binario_entrada);
-fwrite(&dado.unidadeMedida, sizeof(char), 1, binario_entrada);
-fwrite(&dado.velocidade, sizeof(int), 1, binario_entrada);
-fwrite(&dado.nome, strlen(dado.nome), 1, binario_entrada);
-fwrite(&dado.especie, strlen(dado.especie), 1, binario_entrada);
-fwrite(&dado.habitat, strlen(dado.habitat), 1, binario_entrada);
-fwrite(&dado.tipo, strlen(dado.tipo), 1, binario_entrada);
-fwrite(&dado.dieta, strlen(dado.dieta), 1, binario_entrada);
-fwrite(&dado.alimento, strlen(dado.alimento), 1, binario_entrada);
+fread(&encadeamento       , sizeof(int)          , 1, binario_entrada);
+
+fwrite(&dado.populacao    , sizeof(int)          , 1, binario_entrada);
+fwrite(&dado.tamanho      , sizeof(float)        , 1, binario_entrada);
+fwrite(&dado.unidadeMedida, sizeof(char)         , 1, binario_entrada);
+fwrite(&dado.velocidade   , sizeof(int)          , 1, binario_entrada);
+fwrite(&dado.nome         , strlen(dado.nome)    , 1, binario_entrada);
+fwrite(&dado.especie      , strlen(dado.especie) , 1, binario_entrada);
+fwrite(&dado.habitat      , strlen(dado.habitat) , 1, binario_entrada);
+fwrite(&dado.tipo         , strlen(dado.tipo)    , 1, binario_entrada);
+fwrite(&dado.dieta        , strlen(dado.dieta)   , 1, binario_entrada);
+fwrite(&dado.alimento     , strlen(dado.alimento), 1, binario_entrada);
 
 return encadeamento;
 }
@@ -74,7 +75,6 @@ void imprime_dado(FILE* binario_entrada, DADO* dado) {
 
         // Exibir os dados lidos
         // printf("\n\n*********\n");
-
         printf("Nome: %s\n", dado->nome);
         printf("Especie: %s\n", dado->especie);
         if (strcmp(dado->tipo, "") != 0) {
@@ -84,8 +84,8 @@ void imprime_dado(FILE* binario_entrada, DADO* dado) {
         if (strcmp(dado->habitat, "") != 0) {
             printf("Lugar que habitava: %s\n", dado->habitat);
         }
-        printf("Tamanho: %.1f m\n", dado->tamanho);  // Corrigido o formato para float
-        printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);  // Corrigido para garantir o valor correto
+        printf("Tamanho: %.1f m\n", dado->tamanho);
+        printf("Velocidade: %d %cm/h", dado->velocidade, dado->unidadeMedida);
         // printf("\n*********\n\n");
 
     } else {
@@ -134,6 +134,7 @@ char* le_elemento(FILE* arquivo_entrada){
     return elemento;
 }
 
+// Função responsável por criar o cabeçalho do arquivo binário
 void criar_cabecalho(FILE* arquivo_saida, CABECALHO cabecalho){
 
     fseek(arquivo_saida, 0, SEEK_SET);
@@ -153,7 +154,7 @@ void criar_cabecalho(FILE* arquivo_saida, CABECALHO cabecalho){
 
 }
 
-
+// Função que escreve os dados de um arquivo de entrada
 void escreve_dados(FILE* arquivo_entrada, FILE* arquivo_saida){
 
     // Escreve a versão inicial do cabeçalho

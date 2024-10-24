@@ -12,14 +12,16 @@
  
  -------------------------------------------------------------------------
  Leticia:
-    Implementou a funcionalidade 7
+    Implementou as funcionalidades 7 e 9, além de refazer o Makefile, 
+    tornando-o mais e limpo e melhor parr futuras manutenções no projeto.
     
  Porcentagem de participação da sua parte: 
  -------------------------------------------------------------------------
  
  -------------------------------------------------------------------------
  Paulo:
-    Implementou a funcionalidade 8
+    Implementou a funcionalidade 8 e fez adaptações da modularização do 
+    trabalho para o trabalho 2
 
  Porcentagem de participação da sua parte: 
  -------------------------------------------------------------------------
