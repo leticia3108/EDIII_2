@@ -1,7 +1,10 @@
 /* 
+    **************************************************************************
     Algumas funções desse arquivo possui prints de debug que estão comentados.
     Eles ajudam a entender possíveis bugs ao decorrer da execução do programa
     e ajudam em eventuais manutenções.
+    **************************************************************************
+
  */
 
 

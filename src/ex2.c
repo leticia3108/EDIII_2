@@ -1,9 +1,10 @@
 /*
-* O código abaixo tem como objetivo a recuperação de dados obtidos
-* através de um arquivo binário, que será solicitado pelo usuário.
-*
-* Aqui será feita a etapa principal, solicitando funções criadas no
-* módulo 'common.c'
+    ******************************************************************
+    O código abaixo tem como objetivo a recuperação de dados obtidos
+    através de um arquivo binário, que será solicitado pelo usuário.
+    Aqui será feita a etapa principal, solicitando funções criadas no
+    módulo 'common.c'
+    ******************************************************************
 */
 
 

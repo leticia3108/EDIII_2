@@ -1,15 +1,17 @@
 /*
-* O código a seguir é responsável pela inserção de novos registros em um
-* arquivo binário, a ser ecolhido pelo usuário.
-* 
-* Ele irá usar o espaço de lixo, onde foi removido anteriormente outros dados,
-* representado pelo caractere '$', para a inserção desses novos dados.
-* 
-* Essa funcionalidade deverá se repetir 'n' vezes, sendo esse valor também
-* escolhido pelo usuário.
-* 
-* Aqui será feita a etapa principal, solicitando funções criadas no
-* módulo 'common.c'
+    ****************************************************************************
+    O código a seguir é responsável pela inserção de novos registros em um
+    arquivo binário, a ser ecolhido pelo usuário.
+
+    Ele irá usar o espaço de lixo, onde foi removido anteriormente outros dados,
+    representado pelo caractere '$', para a inserção desses novos dados.
+
+    Essa funcionalidade deverá se repetir 'n' vezes, sendo esse valor também
+    escolhido pelo usuário.
+
+    Aqui será feita a etapa principal, solicitando funções criadas no
+    módulo 'common.c'
+    ****************************************************************************
 */
 
 
