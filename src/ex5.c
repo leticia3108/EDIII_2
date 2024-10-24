@@ -19,7 +19,9 @@
 #include <string.h>
 
 #include "../include/main.h"
+#include "../include/funcoes_fornecidas.h"
 #include "../include/ex5.h"
+#include "../include/common.h"
 
 void ex5(){
 
