@@ -1,3 +1,10 @@
+/* 
+    Algumas funções desse arquivo possui prints de debug que estão comentados.
+    Eles ajudam a entender possíveis bugs ao decorrer da execução do programa
+    e ajudam em eventuais manutenções.
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -88,7 +95,6 @@ void busca_dados(FILE *arquivoDados, long PR) {
 /* 
     Função responsável pela funcionalidade 8
         - Realiza a busca de um arquivo na arvore-B e exibe os dados do registro encontrado
-        - Possui prints de debug que estão comentados para facilitar a sua manutenção
  */
 void ex8() {
     // Variáveis para os arquivos e o nome de busca

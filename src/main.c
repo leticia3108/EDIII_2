@@ -13,7 +13,7 @@
  -------------------------------------------------------------------------
  Leticia:
     Implementou as funcionalidades 7 e 9, além de refazer o Makefile, 
-    tornando-o mais e limpo e melhor parr futuras manutenções no projeto.
+    tornando-o mais e limpo e melhor para futuras manutenções no projeto.
     
  Porcentagem de participação da sua parte: 
  -------------------------------------------------------------------------
@@ -21,7 +21,8 @@
  -------------------------------------------------------------------------
  Paulo:
     Implementou a funcionalidade 8 e fez adaptações da modularização do 
-    trabalho para o trabalho 2
+    trabalho para o trabalho 2, que facilitam futuras manutenções no
+    projeto.
 
  Porcentagem de participação da sua parte: 
  -------------------------------------------------------------------------
@@ -59,7 +60,7 @@ int main() {
             ex8();
             break;
         default:
-            printf("Opcao invalida!\n");
+            printf("\n**********\nOpcao invalida!\n**********\n");
             break;
     }
 
