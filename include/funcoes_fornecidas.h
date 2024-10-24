@@ -7,5 +7,6 @@
 #include <stdio.h>
 
 long converteNome (char*);
+void my_scan(char*str);
 
 #endif

@@ -3,7 +3,6 @@ Arquivo com as funções usadas no resto do projeto
 */
 
 #include "header.h"
-int proxRRN = 0;
 
 /* A seguinte função lê uma string variável do arquivo binário na posição
 atual e retorna o desvio do arquivo (considerando o delimitador) */
@@ -276,7 +275,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
 
 }
 
-void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i){
+void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i, int* proxRRN){
 
     //printf("Inserindo (%ld) sem espaço em (%d), int i = %d\n", ind.chave, caminho[i].RRNdoNo, i);
 
@@ -346,7 +345,7 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
 
     no.folha = caminho[i].folha;
     no.nroChavesNo = 2;
-    no.RRNdoNo = ++proxRRN;
+    no.RRNdoNo = ++(*proxRRN);
 
     if(ind_vect[3].novo == 1)
         no.P1= ind_vect[3].p1;
@@ -416,37 +415,38 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
 
     // Atualizar os ponteiros do nó que sobe
     ind_vect[2].p1 = RRN;
-    ind_vect[2].p2 = proxRRN;
+    ind_vect[2].p2 = (*proxRRN);
 
     if ((caminho[i-1].nroChavesNo < (ORDEM_B-1)) && i >= 1){
         insere_com_espaco(binario_saida, ind_vect[2], caminho[i-1].nroChavesNo, caminho[i-1].RRNdoNo);
     } else {
         if (i == 0){
-            no_indice noNovaRaiz = cria_nova_raiz(binario_saida, proxRRN+1);
-     //       printf("#\n RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
-            proxRRN++;
+            no_indice noNovaRaiz = cria_nova_raiz(binario_saida, (*proxRRN)+1);
+     //       printf("#\n RRN = %d (*proxRRN) = %d (%d %d)\n ",RRN, (*proxRRN), ind_vect[2].p1, ind_vect[2].p2);
+            (*proxRRN)++;
             
             insere_com_espaco(binario_saida, ind_vect[2], 0, noNovaRaiz.RRNdoNo);
         } else {
             i--;
-            insere_sem_espaco(binario_saida, ind_vect[2], caminho, i);
+            insere_sem_espaco(binario_saida, ind_vect[2], caminho, i, proxRRN);
         }
     }
 
 }
 
-void ajustaCabecalho (FILE* fbin, char status, int noRaiz, int RRNproxNo){
+void ajustaCabecalho (FILE* fbin, char status, int noRaiz, int* proxRRN){
     
     fseek (fbin, 0, SEEK_SET);
     fwrite (&status, sizeof(char), 1, fbin);
     fwrite (&noRaiz, sizeof(int), 1, fbin);
-    int proxNo = proxRRN + 1;
+    int proxNo = (*proxRRN) + 1;
     fwrite (&proxNo, sizeof(int), 1, fbin);
 
     // Reescrever
 }
 
-void inserir(indice ind, FILE* binario_saida, int RRNraiz){
+//Auto-ajusta o FSEEK
+void inserir(indice ind, FILE* binario_saida, int RRNraiz, int* proxRRN){
 
     no_indice* no = malloc (sizeof(no_indice));
     no_indice* caminho = malloc (sizeof(indice) * 30);
@@ -475,7 +475,8 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
         no->P5 = -1;
 
         escrever(*no, binario_saida);
-        ajustaCabecalho (binario_saida, '0', 0, 1);
+        int prox = 1;
+        ajustaCabecalho (binario_saida, '0', 0, &prox);
     } else{
 
         // Ler o nó raiz e adicioná-lo ao vetor de caminho
@@ -552,7 +553,7 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz){
             if (no->nroChavesNo < ORDEM_B - 1){
                 insere_com_espaco(binario_saida, ind, no->nroChavesNo, RRN);
             } else {
-                insere_sem_espaco(binario_saida, ind, caminho, i);
+                insere_sem_espaco(binario_saida, ind, caminho, i, proxRRN);
                 
             }
     

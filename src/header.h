@@ -65,17 +65,18 @@ int leitura_variavel(char *, FILE*);
 void escrever(no_indice, FILE*);
 void lerNo(no_indice* no, int RRN, FILE* bin);
 void imprime_arvore(FILE* binario_saida, int RRN);
-void ajustaCabecalho (FILE* bin, char status, int noRaiz, int RRNproxNo);
-void inserir(indice ind, FILE* binario_saida, int RRNraiz);
+void ajustaCabecalho (FILE* bin, char status, int noRaiz, int* proxRRN);
+void inserir(indice ind, FILE* binario_saida, int RRNraiz, int* proxRRN);
 void scan_quote_string(char *str);
+void scan_quote_string_mod(char* str);
 
 // Funções respectivas de cada funcionalidade do projeto
-void ex7();
+void ex7(int* proxRRN);
 void cabecalho_indice(FILE*, FILE*);
 int encontra_nome(FILE*, char*, indice*);
 void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN);
 void reordena_no(FILE*, int, int, int);
-void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i);
+void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i, int* proxRRN);
 no_indice cria_nova_raiz(FILE* binario_saida, int RRNNovaRaiz);
 
 void ex9();

@@ -3,6 +3,8 @@
 #include<string.h>
 #include<ctype.h>
 
+#define T_MAX 30
+
 void binarioNaTela(char *nomeArquivoBinario) { /* Você não precisa entender o código dessa função. */
 
 	/* Use essa função para comparação no run.codes. Lembre-se de ter fechado (fclose) o arquivo anteriormente.
@@ -66,6 +68,31 @@ void scan_quote_string(char *str) {
 	}
 }
 
+void my_scan(char*str){
+	char rest[T_MAX];
+	char ini;
+
+	ini = getchar();
+	while(isspace(ini) || ini =='\0'){
+		ini = getchar();
+	}
+
+	if(ini == '\"'){
+		//printf("tenho aspas\n");
+		scanf("%[^\"]", str);
+		getchar();} // Lendo o restante da string}
+		else if(ini == 'N'){
+			strcpy (str, "");
+			scanf("%s", rest);
+		} else{
+			str[0] = ini;
+			scanf("%s", rest);
+			strcat(str, rest);
+		}
+
+	//printf("dentro da função, str = (%s)\n", str);
+}
+
 void scan_quote_string_mod(char *str) {
 
 	/*
@@ -81,25 +108,33 @@ void scan_quote_string_mod(char *str) {
 	*
 	*/
 
-	char R;
+	char R = getchar();
+	printf("R = %d (%c)\n", R, R);
 	int tam;
-
-	while((R = getchar()) != EOF && isspace(R)); // ignorar espaços, \r, \n...
+	char c;
+	printf("escaneando...\n");
+	while(R != EOF && isspace(R)){
+		R = getchar();
+	} // ignorar espaços, \r, \n...
 
 	if(R == 'N' || R == 'n') { // campo NULO
 		getchar(); getchar(); getchar(); // ignorar o "ULO" de NULO.
 		strcpy(str, ""); // copia string vazia
 	} else if(R == '\"') {
-		if((tam = scanf("%[^\"]", str)) != 1) { // ler até o fechamento das aspas
+		if((tam = scanf("%[^\"]", str)) != 0) { // ler até o fechamento das aspas
 			strcpy(str, "");
 			str[tam] = '\n';
+			c = getchar(); // ignorar aspas fechando
+			printf("getchar = %c\n", c);
+			return;
 		}
-		getchar(); // ignorar aspas fechando
 	} else if(R != EOF){ // vc tá tentando ler uma string que não tá entre aspas! Fazer leitura normal %s então, pois deve ser algum inteiro ou algo assim...
 		str[0] = R;
 		scanf("%s", &str[1]);
+		return;
 	} else { // EOF
 		strcpy(str, "");
+		return;
 	}
 }
 
