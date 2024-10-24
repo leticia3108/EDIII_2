@@ -20,7 +20,8 @@ void insere_sem_espaco(FILE*, indice, no_indice*, int);
 void ajustaCabecalho (FILE*, char, int, int);
 void inserir(indice, FILE*, int);
 void imprime_arvore(FILE*, int);
-
+long busca_chave_arvoreB(FILE*, int, long);
+void busca_dados(FILE*, long);
 
 
 #endif
