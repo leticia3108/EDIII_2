@@ -503,6 +503,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fread(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
+    // Print de teste
     printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
 
     fread(&ind_vect[0].chave, sizeof(long), 1, binario_saida);
@@ -512,7 +513,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     for (int i = 1; i < nroChaves; i++){
         fread(&ind_vect[i].p1, sizeof(int), 1, binario_saida);
         ind_vect[i-1].p2 = ind_vect[i].p1;
-        printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2);
+        printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2); // Print de teste
         fread(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
         fread(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
         ind_vect[i].novo = 0;
@@ -558,15 +559,15 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fwrite(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    printf("#(%d) ", ind_vect[0].p1);
+    printf("#(%d) ", ind_vect[0].p1); // Print de teste
 
         for (int i = 0; i < nroChaves; i++){
             fwrite(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].p2, sizeof(int), 1, binario_saida);
-            printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2);
+            printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2); // Print de teste
         }
-    printf("#\n");
+    printf("#\n"); // Print de teste
 }
 
 void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
@@ -575,10 +576,10 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     fseek(binario_saida, (RRN+1)*93+ 1, SEEK_SET);
     fwrite(&nroChaves, sizeof(int), 1, binario_saida);
 
-    printf("#(%d %d)\n ",ind.p1, ind.p2);
+    printf("#(%d %d)\n ",ind.p1, ind.p2); // Print de teste
 
     if (nroChaves == 1){
-        printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves);
+        printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves); // Print de teste
         fseek(binario_saida, (RRN+1)*93 + 9 + 20*(nroChaves-1), SEEK_SET);
         fwrite(&ind.p1, sizeof(int),1, binario_saida);
         fwrite(&ind.chave, sizeof(long),1, binario_saida);
@@ -591,7 +592,8 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     fwrite(&ind.chave, sizeof(long),1, binario_saida);
     fwrite(&ind.pr, sizeof(long),1, binario_saida);
     fwrite(&ind.p2, sizeof(int),1, binario_saida);
-
+    
+    // Print de teste
     printf("Inserindo chave %ld com ponteiro %ld em %d (com espaço - nroChaves = %d) \n", ind.chave, ind.pr, RRN, nroChaves);
 
     reordena_no(binario_saida, RRN, nroChaves, ind.p1);
@@ -600,6 +602,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
 
 void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i){
 
+    // Print de teste
     printf("Inserindo (%ld) sem espaço em (%d), int i = %d", ind.chave, caminho[i].RRNdoNo, i);
 
     int RRN = caminho[i].RRNdoNo;
@@ -731,6 +734,8 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
     // Atualizar os ponteiros do nó que sobe
     ind_vect[2].p1 = RRN;
     ind_vect[2].p2 = proxRRN;
+
+    // Print de teste
     printf("#\n SOBE COM RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
 
     if ((caminho[i-1].nroChavesNo < (ORDEM_B-1)) && i >= 1){
@@ -741,7 +746,7 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
             no_indice noNovaRaiz = cria_nova_raiz(binario_saida, proxRRN+1);
             printf("#\n RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
             proxRRN++;
-            printf("->->-> Uma nova raiz foi criada com RRN = %d", noNovaRaiz.RRNdoNo);
+            printf("->->-> Uma nova raiz foi criada com RRN = %d", noNovaRaiz.RRNdoNo); // Print de teste
             insere_com_espaco(binario_saida, ind_vect[2], 0, noNovaRaiz.RRNdoNo);
         } else {
             i--;
