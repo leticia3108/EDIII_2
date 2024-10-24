@@ -17,29 +17,18 @@ int proxRRN = 0;
 
 /* A seguinte função lê uma string variável do arquivo binário na posição
 atual e retorna o desvio do arquivo (considerando o delimitador) */
-int leitura_variavel(char* str, FILE* binario_entrada){
-
-    char* c = malloc(sizeof(char));
-    if (feof(binario_entrada)){
-        free(c);
-        return -1;
-    }
-    fread(c, sizeof(char), 1, binario_entrada);
-
+int leitura_variavel(char* str, FILE* binario_entrada) {
+    char c;
     int i = 0;
-    while (*c != '#'){
-        str[i] = *c;
-        if (feof(binario_entrada)){
-            free(c);
-            return -1;
-        }
-        fread(c, sizeof(char), 1, binario_entrada);
+
+    // Ler até encontrar o delimitador '#' ou o final do arquivo
+    while (fread(&c, sizeof(char), 1, binario_entrada) == 1 && c != '#') {
+        str[i] = c;
         i++;
     }
-        str[i] = '\0';
-        i++;
-        free(c);
-    return i;
+
+    str[i] = '\0';  // Finalizar a string
+    return i + 1;   // Retornar o número de bytes lidos (inclui o delimitador '#')
 }
 
 int sobreescreve_dado (FILE* binario_entrada, DADO dado){
@@ -64,59 +53,43 @@ return encadeamento;
 }
 
 void imprime_dado(FILE* binario_entrada, DADO* dado) {
-    // Verifica se o registro foi removido
     fread(&(dado->removido), sizeof(char), 1, binario_entrada);
     
-    if (dado->removido != '1') {
+    if (dado->removido != '1') { // Caso o arquivo não tenha sido removido
         // Ignora o encadeamento de registros removidos
-        fseek(binario_entrada, 4, SEEK_CUR);
+        fseek(binario_entrada, 3, SEEK_CUR);
 
-        // Leitura dos campos do registro
-        fread(&(dado->populacao), sizeof(int), 1, binario_entrada);
-        fread(&(dado->tamanho), sizeof(float), 1, binario_entrada);
-        fread(&(dado->unidadeMedida), sizeof(char), 1, binario_entrada);
-        fread(&(dado->velocidade), sizeof(int), 1, binario_entrada);
+        // Leitura correta dos campos numéricos
+        fread(&(dado->populacao)    , sizeof(int)  , 1, binario_entrada);
+        fread(&(dado->tamanho)      , sizeof(float), 1, binario_entrada);  
+        fread(&(dado->unidadeMedida), sizeof(char) , 1, binario_entrada);
+        fread(&(dado->velocidade)   , sizeof(int)  , 1, binario_entrada);  
 
         // Lê as strings variáveis do arquivo binário
-        leitura_variavel(dado->nome, binario_entrada);
+        leitura_variavel(dado->nome   , binario_entrada);
         leitura_variavel(dado->especie, binario_entrada);
         leitura_variavel(dado->habitat, binario_entrada);
-        leitura_variavel(dado->tipo, binario_entrada);
-        leitura_variavel(dado->dieta, binario_entrada);
+        leitura_variavel(dado->tipo   , binario_entrada);
+        leitura_variavel(dado->dieta  , binario_entrada);
 
-        // Adicionar prints para verificar os dados lidos
+        // Exibir os dados lidos
         // printf("\n\n*********\n");
-        // printf("Nome: %s\n", dado->nome);
-        // printf("Especie: %s\n", dado->especie);
-        // printf("Tipo: %s\n", dado->tipo);
-        // printf("Dieta: %s\n", dado->dieta);
-        // printf("Lugar que habitava: %s\n", dado->habitat);
-        // printf("Tamanho: %.1f\n", dado->tamanho);
-        // printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);
+
+        printf("Nome: %s\n", dado->nome);
+        printf("Especie: %s\n", dado->especie);
+        if (strcmp(dado->tipo, "") != 0) {
+            printf("Tipo: %s\n", dado->tipo);
+        }
+        printf("Dieta: %s\n", dado->dieta);
+        if (strcmp(dado->habitat, "") != 0) {
+            printf("Lugar que habitava: %s\n", dado->habitat);
+        }
+        printf("Tamanho: %.1f m\n", dado->tamanho);  // Corrigido o formato para float
+        printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);  // Corrigido para garantir o valor correto
         // printf("\n*********\n\n");
 
-        printf("\n\n*********\n");
-
-        // Exibir os dados no formato correto
-        printf("Nome: %s\nEspecie: %s\n", dado->nome, dado->especie);
-
-        if (strcmp(dado->tipo, "") != 0)
-            printf("Tipo: %s\n", dado->tipo);
-
-        printf("Dieta: %s\n", dado->dieta);
-
-        if (strcmp(dado->habitat, "") != 0)
-            printf("Lugar que habitava: %s\n", dado->habitat);
-
-        printf("Tamanho: %.1lf m\n", dado->tamanho);
-
-        printf("Velocidade: %d %cm/h\n", dado->velocidade, dado->unidadeMedida);
-        printf("\n*********\n\n");
-
-        printf("\n");
     } else {
-        // Caso o registro esteja logicamente removido
-        printf("DEBUG: Registro logicamente removido.\n");
+        printf("Registro inexistente.\n");
     }
 }
 
