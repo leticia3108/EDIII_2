@@ -1,9 +1,13 @@
 #ifndef FUNCOES_FORNECIDAS_H
 #define FUNCOES_FORNECIDAS_H
 
+#include "main.h"
+
 void binarioNaTela(char *);
 void scan_quote_string(char *);
 long converteNome (char*);
+void my_scan(char*);
+
 
 
 typedef struct {

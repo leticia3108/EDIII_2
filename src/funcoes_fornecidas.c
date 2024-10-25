@@ -138,3 +138,28 @@ long converteNome(char* str) {
 
     return result;
 }
+
+void my_scan(char*str){
+	char rest[T_MAX];
+	char ini;
+
+	ini = getchar();
+	while(isspace(ini) || ini =='\0'){
+		ini = getchar();
+	}
+
+	if(ini == '\"'){
+		//printf("tenho aspas\n");
+		scanf("%[^\"]", str);
+		getchar();} // Lendo o restante da string}
+		else if(ini == 'N'){
+			strcpy (str, "");
+			scanf("%s", rest);
+		} else{
+			str[0] = ini;
+			scanf("%s", rest);
+			strcat(str, rest);
+		}
+
+	//printf("dentro da função, str = (%s)\n", str);
+}
