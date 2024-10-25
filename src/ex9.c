@@ -61,6 +61,8 @@ scanf("%s", nome_2);
 char c_zero = '0';
 char c_um = '1';
 
+int* prox = malloc(sizeof(int));
+
 // Abertura do binário de entrada para leitura e alteração de seu status.
 FILE *binario_reescrita = fopen(nome_1,"rb+");
 fseek(binario_reescrita, 0, SEEK_SET);
@@ -146,16 +148,15 @@ for (i = 0; i < n; i++) {
     fread(&RRNraiz, sizeof(int), 1, binario_indice);
     fread(proxRRN, sizeof(int), 1, binario_indice);
     
-    //*(proxRRN)=*(proxRRN)-1;
+    *(prox) = *(proxRRN)-1;
 
-    inserir(ind, binario_indice, RRNraiz, proxRRN);
+    inserir(ind, binario_indice, RRNraiz, prox);
 
     fseek(binario_reescrita, 1, SEEK_SET);
     fwrite(&dado[i].encadeamento, sizeof(int), 1, binario_reescrita);
 }
-    int prox = *(proxRRN)-1;
 
-    ajustaCabecalho(binario_indice,'1',RRNraiz, &prox);
+    ajustaCabecalho(binario_indice,'1',RRNraiz, proxRRN);
 
     // Atualiza o status do arquivo de dados
     fseek(binario_reescrita, 0, SEEK_SET);
