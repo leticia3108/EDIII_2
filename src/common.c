@@ -38,28 +38,74 @@ int leitura_variavel(char* str, FILE* binario_entrada) {
     str[i] = '\0';  // Finalizar a string com '\0'
     return i + 1;   // Retornar o número de bytes lidos (inclui o delimitador '#')
 }
+// Versão antiga (branch paulo)
+// int sobreescreve_dado (FILE* binario_entrada, DADO dado){
 
-int sobreescreve_dado (FILE* binario_entrada, DADO dado){
+// int encadeamento;
+// char rem = 0;
 
-int encadeamento;
-char rem = 0;
+// fwrite(&rem, 1, sizeof(char), binario_entrada);
+// fread(&encadeamento       , sizeof(int)          , 1, binario_entrada);
 
-fwrite(&rem, 1, sizeof(char), binario_entrada);
-fread(&encadeamento       , sizeof(int)          , 1, binario_entrada);
+// fwrite(&dado.populacao    , sizeof(int)          , 1, binario_entrada);
+// fwrite(&dado.tamanho      , sizeof(float)        , 1, binario_entrada);
+// fwrite(&dado.unidadeMedida, sizeof(char)         , 1, binario_entrada);
+// fwrite(&dado.velocidade   , sizeof(int)          , 1, binario_entrada);
+// fwrite(&dado.nome         , strlen(dado.nome)    , 1, binario_entrada);
+// fwrite(&dado.especie      , strlen(dado.especie) , 1, binario_entrada);
+// fwrite(&dado.habitat      , strlen(dado.habitat) , 1, binario_entrada);
+// fwrite(&dado.tipo         , strlen(dado.tipo)    , 1, binario_entrada);
+// fwrite(&dado.dieta        , strlen(dado.dieta)   , 1, binario_entrada);
+// fwrite(&dado.alimento     , strlen(dado.alimento), 1, binario_entrada);
 
-fwrite(&dado.populacao    , sizeof(int)          , 1, binario_entrada);
-fwrite(&dado.tamanho      , sizeof(float)        , 1, binario_entrada);
-fwrite(&dado.unidadeMedida, sizeof(char)         , 1, binario_entrada);
-fwrite(&dado.velocidade   , sizeof(int)          , 1, binario_entrada);
-fwrite(&dado.nome         , strlen(dado.nome)    , 1, binario_entrada);
-fwrite(&dado.especie      , strlen(dado.especie) , 1, binario_entrada);
-fwrite(&dado.habitat      , strlen(dado.habitat) , 1, binario_entrada);
-fwrite(&dado.tipo         , strlen(dado.tipo)    , 1, binario_entrada);
-fwrite(&dado.dieta        , strlen(dado.dieta)   , 1, binario_entrada);
-fwrite(&dado.alimento     , strlen(dado.alimento), 1, binario_entrada);
+// return encadeamento;
+// }
 
-return encadeamento;
+// versão atual (branch leticia)
+int sobreescreve_dado (FILE* binario, DADO dado){
+
+char delim       = '#';
+char lixo        = '$';
+int ac           =  0;
+
+// Escrever a struct no arquivo binário:
+fwrite(&dado.removido,          sizeof(char),  1, binario);
+fwrite(&dado.encadeamento,      sizeof(int),   1, binario);
+fwrite(&dado.populacao,     sizeof(int),   1, binario);
+fwrite(&dado.tamanho,       sizeof(float), 1, binario);
+fwrite(&dado.unidadeMedida, sizeof(char),  1, binario);
+fwrite(&dado.velocidade,    sizeof(int),   1, binario);
+ac += 18;
+
+ac += strlen(dado.nome)+1;
+fwrite(&dado.nome, sizeof(char), strlen(dado.nome), binario);
+fwrite(&delim,    sizeof(char), 1,                binario); // Delimitador
+//printf("%s", dado.nome);
+
+ac += strlen(dado.especie)+1;
+fwrite(&dado.especie, sizeof(char), strlen(dado.especie), binario);
+fwrite(&delim,       sizeof(char), 1,                   binario); // Delimitador
+ac += strlen(dado.habitat)+1;
+fwrite(&dado.habitat, sizeof(char), strlen(dado.habitat), binario);
+fwrite(&delim,       sizeof(char), 1,                   binario); // Delimitador
+ac += strlen(dado.tipo)+1;
+fwrite(&dado.tipo, sizeof(char), strlen(dado.tipo), binario);
+fwrite(&delim,    sizeof(char), 1,                binario); // Delimitador
+ac += strlen(dado.dieta)+1;
+fwrite(&dado.dieta, sizeof(char), strlen(dado.dieta), binario);
+fwrite(&delim,     sizeof(char), 1,                 binario); // Delimitador
+ac += strlen(dado.alimento)+1;
+fwrite(&dado.alimento, sizeof(char), strlen(dado.alimento), binario);
+fwrite(&delim,        sizeof(char), 1,                    binario); // Delimitador
+
+while( (160 - ac) > 0){
+    fwrite(&lixo, sizeof(char), 1, binario); //Identifica o lixo
+    ac++;
 }
+
+return dado.encadeamento;
+}
+
 
 void imprime_dado(FILE* binario_entrada, DADO* dado) {
     fread(&(dado->removido), sizeof(char), 1, binario_entrada);
