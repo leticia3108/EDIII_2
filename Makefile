@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -g -Wall -O0 -std=c99
+# CFLAGS = -g -Wall -O0 -std=c99
+CFLAGS = -g -O0 -std=c99 # Remoção do -Wall para funcionar no runcodes
 INCLUDE = $(wildcard include/*.h)
 SOURCES = $(wildcard src/*.c)
 OBJ = $(SOURCES:$(SRC_DIR)/%.c = $(BUILD_DIR)/%.o)

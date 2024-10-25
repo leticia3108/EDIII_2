@@ -212,6 +212,7 @@ for (i = 0; i < n; i++) {
 
     //printf("Inserção realizada no indice, proxRRN = %d\n", *proxRRN);
     inserir(ind, binario_indice, *proxRRN);
+    // inserir(ind, binario_indice, RRNraiz);
 
     fseek(binario_reescrita, 1, SEEK_SET);
     fwrite(&dado[i].encadeamento, sizeof(int), 1, binario_reescrita);
