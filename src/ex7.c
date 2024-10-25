@@ -64,7 +64,7 @@ int encontra_nome(FILE* fbin, char* nome, indice* ind){
 
     fseek(fbin, 17, SEEK_CUR);
     
-    long pular = (long) leitura_variavel(nome, fbin);
+    long pular = (long) leitura_variavel_02(nome, fbin);
     if (pular == -1) {
         printf("Erro ao ler o noe\n");
         return 1;
@@ -146,7 +146,7 @@ void ex7(int* proxRRN){
         ind->p2 = -1;
         fseek(binario_saida, 1, SEEK_SET);
         fread(&RRNraiz, sizeof(int), 1, binario_saida);
-        inserir(*ind,binario_saida,RRNraiz,proxRRN);   //
+        inserir(*ind,binario_saida,RRNraiz, proxRRN);   //
     }
 
 
