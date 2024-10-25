@@ -1,13 +1,5 @@
 /*
-    ************************************************************
-    Arquivo com funções auxiliares que foram utilizadas para
-    a execução das funcionalidades do projeto.
-
-    Algumas delas possuem alguns prints de debug, que facilitam
-    achar possíveis bugs no projeto, ou a destacar determinadas
-    informações, faciitando o debug.
-    ************************************************************
-
+Arquivo com as funções usadas no resto do projeto
 */
 
 #include <stdlib.h>
