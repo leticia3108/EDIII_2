@@ -47,6 +47,9 @@
 
 int main() {
 
+    int* proxRRN = malloc(sizeof(int));
+    *proxRRN = 0; 
+
     // Leitura da entrada inicial do usuário
     int opcao = 0;
     scanf("%d", &opcao);
