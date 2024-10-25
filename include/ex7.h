@@ -2,7 +2,7 @@
 #define EX7_H
 
 void cabecalho_indice(FILE*, FILE*);
-int encontra_nome(FILE*, char*, indice*);
+void cabecalho_indice(FILE*, FILE*);
 void ex7();
 
 #endif
