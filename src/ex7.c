@@ -1,8 +1,10 @@
 #include "header.h"
 #include "../include/funcoes_fornecidas.h"
 
-/* A Função find_name busca o nome e a chave do registro, pula para 
-o próximo registro e salva os resultados na struct de indice */
+/* A Função cabecalho_indice gera uma versão inicial do cabeçalho 
+do arquivo de índice. Para isso, o status é definido como o de um
+arquivo inconsistente (0), o noRaiz indica que a árvore está vazia
+(-1) e o proximo nó a ser inserido é definido como 0 */
 
 void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
     // Escreve a versão inicial do cabeçalho
@@ -21,6 +23,12 @@ void cabecalho_indice(FILE* fbin, FILE* fbin_ind){
         fwrite("$", sizeof(char), 1, fbin_ind);
     }
 }
+
+/* A Função encontra_nome é utilizada para encontrarum nome no ar-
+quivo de dados, ignorando registros logicamente removidos. Em segui-
+da, o nome é convertido em uma chave com a função converteNome, e 
+uma struct "indice" armazera essa chave, além de um ponteiro para o 
+registro. */
 
 int encontra_nome(FILE* fbin, char* nome, indice* ind){
     char c;
@@ -135,7 +143,7 @@ void ex7(int* proxRRN){
         fread(&RRNraiz, sizeof(int), 1, binario_saida);
         inserir(*ind,binario_saida,RRNraiz,proxRRN);   //
     }
-    //printf("\n");
+
 
     // Imprime a árvore
     int RRN;
@@ -144,9 +152,6 @@ void ex7(int* proxRRN){
 
     // Indicar que a escrita foi concluida corretamente
     ajustaCabecalho(binario_saida, '1', RRN, proxRRN);
-
-    //imprime_arvore(binario_saida, RRN);
-    //imprime_arvore(binario_saida2, 28);
 
     fclose(binario_entrada);
     fclose(binario_saida);

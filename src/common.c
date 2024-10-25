@@ -30,6 +30,8 @@ int leitura_variavel(char* str, FILE* binario_entrada){
     return i;
 }
 
+/* Cria um novo nó raiz para a árvore B e insere seu RRN no cabe-
+çalho do arquivo de índices.*/
 no_indice cria_nova_raiz(FILE* binario_saida, int RRNNovaRaiz){
     no_indice no;
     no.folha = '0';
@@ -60,9 +62,8 @@ no_indice cria_nova_raiz(FILE* binario_saida, int RRNNovaRaiz){
     return no;
 }
 
+/* Escreve um nó no fim do arquivo de índices. */
 void escrever(no_indice no, FILE* binario_saida){
-
-//printf("Escrevendo...\n");
 
 fseek(binario_saida,0,SEEK_END);
 
@@ -90,15 +91,12 @@ fwrite(&no.P4, sizeof(int), 1, binario_saida);
 fwrite(&no.C4, sizeof(long), 1, binario_saida);
 fwrite(&no.PR4, sizeof(long), 1, binario_saida);
 
-//printf("*PR1 = %ld*\n", no.PR1);
-
 fwrite(&no.P5, sizeof(int), 1, binario_saida); 
-
 }
 
+/* Sobreescreve um nó na posição especificada por RRN. Similar à 
+função anterior. */
 void sobreescrever(no_indice no, FILE* binario_saida, int RRN){
-
-////printf("Escrevendo...\n");
 
 fseek(binario_saida,(1+RRN)*93,SEEK_SET);
 
@@ -127,15 +125,11 @@ fwrite(&no.C4, sizeof(long), 1, binario_saida);
 fwrite(&no.PR4, sizeof(long), 1, binario_saida);
 
 fwrite(&no.P5, sizeof(int), 1, binario_saida); 
-//printf("*PR1 = %ld*\n", no.PR1);
 
 }
 
-void printaNo(no_indice* no){
-    //printf("Print Nó (%d): (%d) %ld %ld (%d) %ld(%d) %ld (%d) %ld (%d)\n",
-    //no->RRNdoNo, no->P1, no->C1, no->PR1, no->P2, no->C2, no->P3, no-> C3, no->P4, no->C4, no->P5);
-}
-
+/* Lê um nó do arquivo de índíces na posição especificada por RRN. 
+*/
 void lerNo(no_indice* no, int RRN, FILE* bin){
 
         fseek(bin, (RRN+1)*93, SEEK_SET);
@@ -166,6 +160,8 @@ void lerNo(no_indice* no, int RRN, FILE* bin){
         fread(&(no->P5), sizeof(int), 1, bin); 
 }
 
+/* Reordena um nó da árvore B com os índices posicionados de acordo
+com o valor de suas chaves */
 void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     indice ind_vect[ORDEM_B-1];
@@ -175,7 +171,6 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fread(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    ////printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
 
     fread(&ind_vect[0].chave, sizeof(long), 1, binario_saida);
     fread(&ind_vect[0].pr, sizeof(long), 1, binario_saida);
@@ -184,7 +179,6 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     for (int i = 1; i < nroChaves; i++){
         fread(&ind_vect[i].p1, sizeof(int), 1, binario_saida);
         ind_vect[i-1].p2 = ind_vect[i].p1;
-        ////printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2);
         fread(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
         fread(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
         ind_vect[i].novo = 0;
@@ -194,9 +188,6 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     ind_vect[nroChaves-1].p1 = p1;
 
     fread(&ind_vect[nroChaves-1].p2, sizeof(int), 1, binario_saida);
-
-  //  //printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
-  //  nroChaves, ind_vect[0].chave, ind_vect[1].chave,ind_vect[2].chave,ind_vect[3].chave);
 
     for (int j = 0; j < nroChaves-1; j++){
     for(int i = 0; i < nroChaves-1; i++){
@@ -223,34 +214,27 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     } }}
 
-  //  //printf("nroChave = %d, chaves = %ld %ld %ld %ld\n",
-   // nroChaves, ind_vect[0].chave, ind_vect[1].chave,ind_vect[2].chave,ind_vect[3].chave);
-
     fseek(binario_saida, (RRNno+1)*93 + 9, SEEK_SET);
 
     fwrite(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    ////printf("#(%d) ", ind_vect[0].p1);
 
         for (int i = 0; i < nroChaves; i++){
             fwrite(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].p2, sizeof(int), 1, binario_saida);
-        //    //printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2);
         }
-    //printf("#\n");
 }
 
+/* Insere uma chave em um nó com espaço disponível, ordenando os 
+índices com a função reordena_no. */
 void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
 
     nroChaves++;
     fseek(binario_saida, (RRN+1)*93+ 1, SEEK_SET);
     fwrite(&nroChaves, sizeof(int), 1, binario_saida);
 
-    //printf("#(%d %d)\n ",ind.p1, ind.p2);
-
     if (nroChaves == 1){
-        //printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves);
         fseek(binario_saida, (RRN+1)*93 + 9 + 20*(nroChaves-1), SEEK_SET);
         fwrite(&ind.p1, sizeof(int),1, binario_saida);
         fwrite(&ind.chave, sizeof(long),1, binario_saida);
@@ -269,15 +253,13 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
 
     no_indice* no = malloc (sizeof(no_indice));
     lerNo(no, RRN, binario_saida);
-    printaNo(no);
-    //printf("\n");
     free(no);
 
 }
 
+/* Insere uma chave em um nó sem espaço disponível, reestruturando 
+a árvore e, se necessário, criando uma nova raiz. */
 void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i, int* proxRRN){
-
-    //printf("Inserindo (%ld) sem espaço em (%d), int i = %d\n", ind.chave, caminho[i].RRNdoNo, i);
 
     int RRN = caminho[i].RRNdoNo;
     indice ind_vect[ORDEM_B];
@@ -376,7 +358,6 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
     // Criar um novo registro com a metade direita do atual
     escrever(no, binario_saida);
     //printf("P2:");
-    printaNo(&no);
     //printf("\n");
 
     // Atualizar o registro atual com a metade esquerda
@@ -410,7 +391,6 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
 
     sobreescrever(no, binario_saida, caminho[i].RRNdoNo);
     //printf("P1:");
-    printaNo(&no);
     //printf("\n");
 
     // Atualizar os ponteiros do nó que sobe
@@ -422,7 +402,6 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
     } else {
         if (i == 0){
             no_indice noNovaRaiz = cria_nova_raiz(binario_saida, (*proxRRN)+1);
-     //       printf("#\n RRN = %d (*proxRRN) = %d (%d %d)\n ",RRN, (*proxRRN), ind_vect[2].p1, ind_vect[2].p2);
             (*proxRRN)++;
             
             insere_com_espaco(binario_saida, ind_vect[2], 0, noNovaRaiz.RRNdoNo);
@@ -434,6 +413,8 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
 
 }
 
+/* Ajusta o cabeçalho da árvore de acordo com os parâmetros de 
+entrada. */
 void ajustaCabecalho (FILE* fbin, char status, int noRaiz, int* proxRRN){
     
     fseek (fbin, 0, SEEK_SET);
@@ -441,8 +422,6 @@ void ajustaCabecalho (FILE* fbin, char status, int noRaiz, int* proxRRN){
     fwrite (&noRaiz, sizeof(int), 1, fbin);
     int proxNo = (*proxRRN) + 1;
     fwrite (&proxNo, sizeof(int), 1, fbin);
-
-    // Reescrever
 }
 
 //Auto-ajusta o FSEEK
@@ -509,7 +488,6 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz, int* proxRRN){
                     RRN = no->P5;
 
             i++;
-          //  printf("***RRN = %d\n", RRN);
             lerNo(no, RRN, binario_saida);
             lerNo(&(caminho[i]), RRN, binario_saida); 
 
@@ -561,55 +539,4 @@ void inserir(indice ind, FILE* binario_saida, int RRNraiz, int* proxRRN){
 
     free(no);
     free(caminho);
-}
-
-void imprime_arvore(FILE* binario_saida, int RRN){
-
-    no_indice no;
-
-    fseek(binario_saida, 93*(RRN+1), SEEK_SET);
-
-    fread(&no.folha, sizeof(char), 1, binario_saida);
-    fread(&no.nroChavesNo, sizeof(int), 1, binario_saida);
-    fread(&no.RRNdoNo, sizeof(int), 1, binario_saida);
-
-    fread(&no.P1, sizeof(int), 1, binario_saida);
-
-    fread(&no.C1, sizeof(long), 1, binario_saida);
-    fread(&no.PR1, sizeof(long), 1, binario_saida);
-
-    fread(&no.P2, sizeof(int), 1, binario_saida);
-
-    fread(&no.C2, sizeof(long), 1, binario_saida);
-    fread(&no.PR2, sizeof(long), 1, binario_saida);
-
-    fread(&no.P3, sizeof(int), 1, binario_saida);
-
-    fread(&no.C3, sizeof(long), 1, binario_saida);
-    fread(&no.PR3, sizeof(long), 1, binario_saida);
-
-    fread(&no.P4, sizeof(int), 1, binario_saida);
-
-    fread(&no.C4, sizeof(long), 1, binario_saida);
-    fread(&no.PR4, sizeof(long), 1, binario_saida);
-
-    fread(&no.P5, sizeof(int), 1, binario_saida);
-
-    printf(" = (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n", no.P1, no.C1, no.P2, no.C2, no.P3, no.C3, no.P4, no.C4, no.P5);
-    
-    if (no.P1 != -1){
-        printf("P1");
-        imprime_arvore(binario_saida, no.P1);}
-    if (no.P2 != -1){
-        printf("P2");
-        imprime_arvore(binario_saida, no.P2);}
-    if (no.P3!= -1){
-        printf("P3");
-        imprime_arvore(binario_saida, no.P3);}
-    if (no.P4!= -1){
-        printf("P4");
-        imprime_arvore(binario_saida, no.P4);}
-    if (no.P5!= -1){
-        printf("P5");
-        imprime_arvore(binario_saida, no.P5);}
 }
