@@ -142,16 +142,15 @@ for (i = 0; i < n; i++) {
     fread(&RRNraiz, sizeof(int), 1, binario_indice);
     fread(proxRRN, sizeof(int), 1, binario_indice);
     
-    //*(proxRRN)=*(proxRRN)-1;
+    *(proxRRN)=*(proxRRN)-1;
 
     inserir(ind, binario_indice, RRNraiz, proxRRN);
 
     fseek(binario_reescrita, 1, SEEK_SET);
     fwrite(&dado[i].encadeamento, sizeof(int), 1, binario_reescrita);
 }
-    int prox = *(proxRRN)-1;
-
-    ajustaCabecalho(binario_indice,'1',RRNraiz, &prox);
+    *(proxRRN)=*(proxRRN)+1;
+    ajustaCabecalho(binario_indice,'1',RRNraiz, proxRRN);
 
     // Atualiza o status do arquivo de dados
     fseek(binario_reescrita, 0, SEEK_SET);
