@@ -6,6 +6,7 @@ Arquivo com as funções usadas no resto do projeto
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "../include/main.h"
 #include "../include/funcoes_fornecidas.h"
@@ -56,7 +57,7 @@ int leitura_variavel_02(char* str, FILE* binario_entrada){
 }
 
 
-int sobreescreve_dado (FILE* binario_entrada, DADO dado){
+int sobreescreve_dado_ex5 (FILE* binario_entrada, DADO dado){
 
 int encadeamento;
 char rem = 0;
@@ -526,7 +527,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     for (int i = 1; i < nroChaves; i++){
         fread(&ind_vect[i].p1, sizeof(int), 1, binario_saida);
         ind_vect[i-1].p2 = ind_vect[i].p1;
-        printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2); // Print de teste
+        // printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2); // Print de teste
         fread(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
         fread(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
         ind_vect[i].novo = 0;
@@ -578,7 +579,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
             fwrite(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].p2, sizeof(int), 1, binario_saida);
-            printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2); // Print de teste
+            // printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2); // Print de teste
         }
     // printf("#\n"); // Print de teste
 }
@@ -592,7 +593,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     // printf("#(%d %d)\n ",ind.p1, ind.p2); // Print de teste
 
     if (nroChaves == 1){
-        printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves); // Print de teste
+        // printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves); // Print de teste
         fseek(binario_saida, (RRN+1)*93 + 9 + 20*(nroChaves-1), SEEK_SET);
         fwrite(&ind.p1, sizeof(int),1, binario_saida);
         fwrite(&ind.chave, sizeof(long),1, binario_saida);
@@ -1194,22 +1195,22 @@ void imprime_arvore(FILE* binario_saida, int RRN){
 
     fread(&no.P5, sizeof(int), 1, binario_saida);
 
-    printf(" = (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n", no.P1, no.C1, no.P2, no.C2, no.P3, no.C3, no.P4, no.C4, no.P5);
+    // printf(" = (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n", no.P1, no.C1, no.P2, no.C2, no.P3, no.C3, no.P4, no.C4, no.P5);
     
     if (no.P1 != -1){
-        printf("P1");
+        // printf("P1");
         imprime_arvore(binario_saida, no.P1);}
     if (no.P2 != -1){
-        printf("P2");
+        // printf("P2");
         imprime_arvore(binario_saida, no.P2);}
     if (no.P3!= -1){
-        printf("P3");
+        // printf("P3");
         imprime_arvore(binario_saida, no.P3);}
     if (no.P4!= -1){
-        printf("P4");
+        // printf("P4");
         imprime_arvore(binario_saida, no.P4);}
     if (no.P5!= -1){
-        printf("P5");
+        // printf("P5");
         imprime_arvore(binario_saida, no.P5);}
 }
 
@@ -1289,4 +1290,30 @@ void busca_dados(FILE *arquivoDados, long PR) {
 
     // Se o registro não foi removido, ler e exibir os dados
     imprime_dado(arquivoDados, &dado);
+}
+
+
+void my_scan(char*str){
+	char rest[T_MAX];
+	char ini;
+
+	ini = getchar();
+	while(isspace(ini) || ini =='\0'){
+		ini = getchar();
+	}
+
+	if(ini == '\"'){
+		//printf("tenho aspas\n");
+		scanf("%[^\"]", str);
+		getchar();} // Lendo o restante da string}
+		else if(ini == 'N'){
+			strcpy (str, "");
+			scanf("%s", rest);
+		} else{
+			str[0] = ini;
+			scanf("%s", rest);
+			strcat(str, rest);
+		}
+
+	//printf("dentro da função, str = (%s)\n", str);
 }

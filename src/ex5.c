@@ -65,7 +65,7 @@ for (int i = 0; i < n; i++) {
     fread(&topo, sizeof(int), 1, binario_entrada);
 
     fseek(binario_entrada, 1600 + topo*160, SEEK_CUR);
-    topo = sobreescreve_dado(binario_entrada, *dado[i]);
+    topo = sobreescreve_dado_ex5(binario_entrada, *dado[i]);
     
 }
 

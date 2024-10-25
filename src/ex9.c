@@ -7,7 +7,7 @@
 #include "../include/ex9.h"
 
 // Para utilizar essa função posicionar corretamente o inicio do arquivo.
-int sobreescreve_dado (FILE* binario, DADO dado){
+int sobreescreve_dado_ex9 (FILE* binario, DADO dado){
 
 char delim       = '#';
 char lixo        = '$';
@@ -140,7 +140,7 @@ for (i = 0; i < n; i++) {
         ind.pr = ftell(binario_reescrita);
     }
 
-    sobreescreve_dado(binario_reescrita, dado[i]);
+    sobreescreve_dado_ex9 (binario_reescrita, dado[i]);
 
     fseek(binario_indice, 1, SEEK_SET);
     fread(&RRNraiz, sizeof(int), 1, binario_indice);

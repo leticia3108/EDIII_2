@@ -5,7 +5,7 @@
 
 int leitura_variavel_01(char*, FILE*);
 int leitura_variavel_02(char*, FILE*);
-int sobreescreve_dado (FILE*, DADO);
+int sobreescreve_dado_ex5 (FILE*, DADO);
 void imprime_dado(FILE*, DADO*);
 char* le_elemento(FILE*);
 void criar_cabecalho(FILE*, CABECALHO);
@@ -23,5 +23,6 @@ void inserir(indice, FILE*, int, int*);
 void imprime_arvore(FILE*, int);
 long busca_chave_arvoreB(FILE*, int, long);
 void busca_dados(FILE*, long);
+void my_scan(char*);
 
 #endif
