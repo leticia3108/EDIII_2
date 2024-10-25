@@ -46,27 +46,23 @@
 
 
 int main() {
+
     // Leitura da entrada inicial do usuário
-
-    int* proxRRN = malloc(sizeof(int));
-    *proxRRN = 0; 
-
     int opcao = 0;
     scanf("%d", &opcao);
     getc(stdin);
 
-    switch (opcao){
+    switch (opcao) {
         case 7:
-            ex7(proxRRN);
+            ex7();
             break;
-        case 9:
-            ex9(proxRRN);
+        case 8:
+            ex8();
             break;
-        case 10:
-            binarioNaTela("d9.bin");
+        default:
+            printf("\n**********\nOpcao invalida!\n**********\n");
             break;
     }
 
-    free(proxRRN);
     return 0;
 }

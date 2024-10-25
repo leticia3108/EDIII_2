@@ -30,74 +30,28 @@ int leitura_variavel(char* str, FILE* binario_entrada) {
     str[i] = '\0';  // Finalizar a string com '\0'
     return i + 1;   // Retornar o número de bytes lidos (inclui o delimitador '#')
 }
-// Versão antiga (branch paulo)
-// int sobreescreve_dado (FILE* binario_entrada, DADO dado){
 
-// int encadeamento;
-// char rem = 0;
+int sobreescreve_dado (FILE* binario_entrada, DADO dado){
 
-// fwrite(&rem, 1, sizeof(char), binario_entrada);
-// fread(&encadeamento       , sizeof(int)          , 1, binario_entrada);
+int encadeamento;
+char rem = 0;
 
-// fwrite(&dado.populacao    , sizeof(int)          , 1, binario_entrada);
-// fwrite(&dado.tamanho      , sizeof(float)        , 1, binario_entrada);
-// fwrite(&dado.unidadeMedida, sizeof(char)         , 1, binario_entrada);
-// fwrite(&dado.velocidade   , sizeof(int)          , 1, binario_entrada);
-// fwrite(&dado.nome         , strlen(dado.nome)    , 1, binario_entrada);
-// fwrite(&dado.especie      , strlen(dado.especie) , 1, binario_entrada);
-// fwrite(&dado.habitat      , strlen(dado.habitat) , 1, binario_entrada);
-// fwrite(&dado.tipo         , strlen(dado.tipo)    , 1, binario_entrada);
-// fwrite(&dado.dieta        , strlen(dado.dieta)   , 1, binario_entrada);
-// fwrite(&dado.alimento     , strlen(dado.alimento), 1, binario_entrada);
+fwrite(&rem, 1, sizeof(char), binario_entrada);
+fread(&encadeamento       , sizeof(int)          , 1, binario_entrada);
 
-// return encadeamento;
-// }
+fwrite(&dado.populacao    , sizeof(int)          , 1, binario_entrada);
+fwrite(&dado.tamanho      , sizeof(float)        , 1, binario_entrada);
+fwrite(&dado.unidadeMedida, sizeof(char)         , 1, binario_entrada);
+fwrite(&dado.velocidade   , sizeof(int)          , 1, binario_entrada);
+fwrite(&dado.nome         , strlen(dado.nome)    , 1, binario_entrada);
+fwrite(&dado.especie      , strlen(dado.especie) , 1, binario_entrada);
+fwrite(&dado.habitat      , strlen(dado.habitat) , 1, binario_entrada);
+fwrite(&dado.tipo         , strlen(dado.tipo)    , 1, binario_entrada);
+fwrite(&dado.dieta        , strlen(dado.dieta)   , 1, binario_entrada);
+fwrite(&dado.alimento     , strlen(dado.alimento), 1, binario_entrada);
 
-// versão atual (branch leticia)
-int sobreescreve_dado (FILE* binario, DADO dado){
-
-char delim       = '#';
-char lixo        = '$';
-int ac           =  0;
-
-// Escrever a struct no arquivo binário:
-fwrite(&dado.removido,          sizeof(char),  1, binario);
-fwrite(&dado.encadeamento,      sizeof(int),   1, binario);
-fwrite(&dado.populacao,     sizeof(int),   1, binario);
-fwrite(&dado.tamanho,       sizeof(float), 1, binario);
-fwrite(&dado.unidadeMedida, sizeof(char),  1, binario);
-fwrite(&dado.velocidade,    sizeof(int),   1, binario);
-ac += 18;
-
-ac += strlen(dado.nome)+1;
-fwrite(&dado.nome, sizeof(char), strlen(dado.nome), binario);
-fwrite(&delim,    sizeof(char), 1,                binario); // Delimitador
-//printf("%s", dado.nome);
-
-ac += strlen(dado.especie)+1;
-fwrite(&dado.especie, sizeof(char), strlen(dado.especie), binario);
-fwrite(&delim,       sizeof(char), 1,                   binario); // Delimitador
-ac += strlen(dado.habitat)+1;
-fwrite(&dado.habitat, sizeof(char), strlen(dado.habitat), binario);
-fwrite(&delim,       sizeof(char), 1,                   binario); // Delimitador
-ac += strlen(dado.tipo)+1;
-fwrite(&dado.tipo, sizeof(char), strlen(dado.tipo), binario);
-fwrite(&delim,    sizeof(char), 1,                binario); // Delimitador
-ac += strlen(dado.dieta)+1;
-fwrite(&dado.dieta, sizeof(char), strlen(dado.dieta), binario);
-fwrite(&delim,     sizeof(char), 1,                 binario); // Delimitador
-ac += strlen(dado.alimento)+1;
-fwrite(&dado.alimento, sizeof(char), strlen(dado.alimento), binario);
-fwrite(&delim,        sizeof(char), 1,                    binario); // Delimitador
-
-while( (160 - ac) > 0){
-    fwrite(&lixo, sizeof(char), 1, binario); //Identifica o lixo
-    ac++;
+return encadeamento;
 }
-
-return dado.encadeamento;
-}
-
 
 void imprime_dado(FILE* binario_entrada, DADO* dado) {
     fread(&(dado->removido), sizeof(char), 1, binario_entrada);
@@ -417,14 +371,14 @@ no_indice cria_nova_raiz(FILE* binario_saida, int RRNNovaRaiz){
     no.PR3 = -1;
     no.PR4 = -1;
     
-    // printf("# Criando nova raiz\n");
+    printf("# Criando nova raiz\n");
     escrever(no, binario_saida);
 
     // Atualização do RRN da raiz (cabeçalho)
     fseek(binario_saida, 1, SEEK_SET);
     fwrite(&RRNNovaRaiz, sizeof(int), 1, binario_saida);
 
-    // printf ("#Novo RRN da raiz = %d\n", RRNNovaRaiz);
+    printf ("#Novo RRN da raiz = %d\n", RRNNovaRaiz);
     return no;
 }
 
@@ -538,7 +492,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     fread(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
     // Print de teste
-    // printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
+    printf("ind_vect[0].p1 = %d\n", ind_vect[0].p1);
 
     fread(&ind_vect[0].chave, sizeof(long), 1, binario_saida);
     fread(&ind_vect[0].pr, sizeof(long), 1, binario_saida);
@@ -547,7 +501,7 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
     for (int i = 1; i < nroChaves; i++){
         fread(&ind_vect[i].p1, sizeof(int), 1, binario_saida);
         ind_vect[i-1].p2 = ind_vect[i].p1;
-        // printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2); // Print de teste
+        printf("ind_vect[%d].p2 = %d\n", i, ind_vect[i-1].p2); // Print de teste
         fread(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
         fread(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
         ind_vect[i].novo = 0;
@@ -593,15 +547,15 @@ void reordena_no(FILE* binario_saida, int RRNno, int nroChaves, int p1){
 
     fwrite(&ind_vect[0].p1, sizeof(int), 1, binario_saida);
 
-    // printf("#(%d) ", ind_vect[0].p1); // Print de teste
+    printf("#(%d) ", ind_vect[0].p1); // Print de teste
 
         for (int i = 0; i < nroChaves; i++){
             fwrite(&ind_vect[i].chave, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].pr, sizeof(long), 1, binario_saida);
             fwrite(&ind_vect[i].p2, sizeof(int), 1, binario_saida);
-            // printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2); // Print de teste
+            printf("#%ld (%d)", ind_vect[i].chave, ind_vect[i].p2); // Print de teste
         }
-    // printf("#\n"); // Print de teste
+    printf("#\n"); // Print de teste
 }
 
 void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
@@ -610,10 +564,10 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     fseek(binario_saida, (RRN+1)*93+ 1, SEEK_SET);
     fwrite(&nroChaves, sizeof(int), 1, binario_saida);
 
-    // printf("#(%d %d)\n ",ind.p1, ind.p2); // Print de teste
+    printf("#(%d %d)\n ",ind.p1, ind.p2); // Print de teste
 
     if (nroChaves == 1){
-        // printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves); // Print de teste
+        printf("Inserindo nova raiz (%d) %ld (%d) com ponteiro %ld em %d (com espaço - nroChaves = %d) \n",ind.p1, ind.chave, ind.p2, ind.pr, RRN, nroChaves); // Print de teste
         fseek(binario_saida, (RRN+1)*93 + 9 + 20*(nroChaves-1), SEEK_SET);
         fwrite(&ind.p1, sizeof(int),1, binario_saida);
         fwrite(&ind.chave, sizeof(long),1, binario_saida);
@@ -628,7 +582,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
     fwrite(&ind.p2, sizeof(int),1, binario_saida);
     
     // Print de teste
-    // printf("Inserindo chave %ld com ponteiro %ld em %d (com espaço - nroChaves = %d) \n", ind.chave, ind.pr, RRN, nroChaves);
+    printf("Inserindo chave %ld com ponteiro %ld em %d (com espaço - nroChaves = %d) \n", ind.chave, ind.pr, RRN, nroChaves);
 
     reordena_no(binario_saida, RRN, nroChaves, ind.p1);
 
@@ -637,7 +591,7 @@ void insere_com_espaco(FILE* binario_saida, indice ind, int nroChaves, int RRN){
 void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int i){
 
     // Print de teste
-    // printf("Inserindo (%ld) sem espaço em (%d), int i = %d", ind.chave, caminho[i].RRNdoNo, i);
+    printf("Inserindo (%ld) sem espaço em (%d), int i = %d", ind.chave, caminho[i].RRNdoNo, i);
 
     int RRN = caminho[i].RRNdoNo;
     indice ind_vect[ORDEM_B];
@@ -770,17 +724,17 @@ void insere_sem_espaco(FILE* binario_saida, indice ind, no_indice* caminho, int 
     ind_vect[2].p2 = proxRRN;
 
     // Print de teste
-    // printf("#\n SOBE COM RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
+    printf("#\n SOBE COM RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
 
     if ((caminho[i-1].nroChavesNo < (ORDEM_B-1)) && i >= 1){
         insere_com_espaco(binario_saida, ind_vect[2], caminho[i-1].nroChavesNo, caminho[i-1].RRNdoNo);
-        // printf("#->insere com espaco caminho[%d].RRNdoNo = %d\n", i-1, caminho[i-1].RRNdoNo);
+        printf("#->insere com espaco caminho[%d].RRNdoNo = %d\n", i-1, caminho[i-1].RRNdoNo);
     } else {
         if (i == 0){
             no_indice noNovaRaiz = cria_nova_raiz(binario_saida, proxRRN+1);
-            // printf("#\n RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
+            printf("#\n RRN = %d proxRRN = %d (%d %d)\n ",RRN, proxRRN, ind_vect[2].p1, ind_vect[2].p2);
             proxRRN++;
-            // printf("->->-> Uma nova raiz foi criada com RRN = %d", noNovaRaiz.RRNdoNo); // Print de teste
+            printf("->->-> Uma nova raiz foi criada com RRN = %d", noNovaRaiz.RRNdoNo); // Print de teste
             insere_com_espaco(binario_saida, ind_vect[2], 0, noNovaRaiz.RRNdoNo);
         } else {
             i--;
@@ -929,22 +883,22 @@ void imprime_arvore(FILE* binario_saida, int RRN){
 
     fread(&no.P5, sizeof(int), 1, binario_saida);
 
-    // printf(" = (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n", no.P1, no.C1, no.P2, no.C2, no.P3, no.C3, no.P4, no.C4, no.P5);
+    printf(" = (%d) %ld (%d) %ld (%d) %ld (%d) %ld (%d)\n", no.P1, no.C1, no.P2, no.C2, no.P3, no.C3, no.P4, no.C4, no.P5);
     
     if (no.P1 != -1){
-        // printf("P1");
+        printf("P1");
         imprime_arvore(binario_saida, no.P1);}
     if (no.P2 != -1){
-        // printf("P2");
+        printf("P2");
         imprime_arvore(binario_saida, no.P2);}
     if (no.P3!= -1){
-        // printf("P3");
+        printf("P3");
         imprime_arvore(binario_saida, no.P3);}
     if (no.P4!= -1){
-        // printf("P4");
+        printf("P4");
         imprime_arvore(binario_saida, no.P4);}
     if (no.P5!= -1){
-        // printf("P5");
+        printf("P5");
         imprime_arvore(binario_saida, no.P5);}
 }
 

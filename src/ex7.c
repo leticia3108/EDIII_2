@@ -72,7 +72,7 @@ int encontra_nome(FILE* fbin, char* nome, indice* ind){
     return 0;
 }
 
-void ex7(int* proxRRN){
+void ex7(){
 
     // Ler o nome do arquivo de entrada, com tamanho máximo 30:
     char nome_entrada[T_MAX];
@@ -140,7 +140,7 @@ void ex7(int* proxRRN){
         ind->p2 = -1;
         fseek(binario_saida, 1, SEEK_SET);
         fread(&RRNraiz, sizeof(int), 1, binario_saida);
-        inserir(*ind,binario_saida, *proxRRN);   //
+        inserir(*ind,binario_saida,RRNraiz);   //
     }
     //printf("\n");
 
@@ -150,7 +150,7 @@ void ex7(int* proxRRN){
     fread(&RRN, sizeof(int), 1, binario_saida);
 
     // Indicar que a escrita foi concluida corretamente
-    ajustaCabecalho(binario_saida, '1', RRN, *proxRRN);
+    ajustaCabecalho(binario_saida, '1', RRN, -2);
 
     //imprime_arvore(binario_saida, RRN);
     //imprime_arvore(binario_saida2, 28);
