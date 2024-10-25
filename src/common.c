@@ -139,7 +139,7 @@ void imprime_dado(FILE* binario_entrada, DADO* dado) {
             printf("Lugar que habitava: %s\n", dado->habitat);
         }
         printf("Tamanho: %.1f m\n", dado->tamanho);
-        printf("Velocidade: %d %cm/h", dado->velocidade, dado->unidadeMedida);
+        printf("Velocidade: %d %cm/h\n\n", dado->velocidade, dado->unidadeMedida);
         // printf("\n*********\n\n");
 
     } else {
