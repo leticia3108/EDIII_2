@@ -53,12 +53,19 @@ int main() {
     getc(stdin);
 
     switch (opcao) {
+
         case 7:
-            ex7();
+            ex7(proxRRN);
             break;
+
         case 8:
             ex8();
             break;
+
+        case 9:
+            ex9(proxRRN);
+            break;
+
         default:
             printf("\n**********\nOpcao invalida!\n**********\n");
             break;
